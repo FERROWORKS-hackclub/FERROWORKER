@@ -1,0 +1,26 @@
+name: Inject PayPal Client ID
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  inject-paypal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inject PayPal client ID
+        env:
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+        run: |
+          if [ -z "$PAYPAL_CLIENT_ID" ]; then
+            echo "PAYPAL_CLIENT_ID secret is not set. Skipping injection."
+            exit 0
+          fi
+          sed -i 's/YOUR_PAYPAL_CLIENT_ID/'"$PAYPAL_CLIENT_ID"'/g' index.html
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add index.html
+          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          git commit -m "Inject PayPal client ID"
+          git push
