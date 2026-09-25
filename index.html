@@ -135,6 +135,52 @@
 
   #paypal-button-container { margin-top:18px; }
 
+  .donate-amount-form { margin-top:18px; }
+
+  .donate-label {
+    display:block;
+    margin-bottom:10px;
+    color:var(--ink-soft);
+    font-size:.85rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+
+  .donate-presets {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:10px;
+  }
+
+  .donate-preset {
+    padding:8px 12px;
+    border:1px solid var(--rule);
+    background:transparent;
+    color:var(--ink);
+    font-family:inherit;
+    font-size:.9rem;
+    cursor:pointer;
+  }
+
+  .donate-preset:hover,
+  .donate-preset[aria-pressed="true"] {
+    border-color:var(--rust);
+    color:var(--rust);
+  }
+
+  .donate-amount-input {
+    font-family:inherit;
+    font-size:1rem;
+    padding:10px 12px;
+    border:1px solid var(--rule);
+    background:transparent;
+    color:var(--ink);
+    outline:none;
+    width:100%;
+    max-width:220px;
+  }
+
   .secure-pay-badge {
     display:inline-flex;
     align-items:center;
@@ -388,7 +434,19 @@
       <h2>Support the Project</h2>
       <p>If you want to help us build FERROWORKER, you can donate through Hack Club Bank or PayPal. Every dollar goes toward parts, materials, and making the guide free for everyone.</p>
       <a class="donate-app-cta" href="https://hcb.hackclub.com/donations/start/ferroworks" target="_blank" rel="noopener">Donate in the HCB app</a>
-      <div id="paypal-button-container"></div>
+
+      <form class="donate-amount-form" id="donate-amount-form" autocomplete="off">
+        <label class="donate-label" for="donate-amount">Donation amount (AUD)</label>
+        <div class="donate-presets" role="group" aria-label="Preset donation amounts">
+          <button type="button" class="donate-preset" data-amount="10">$10</button>
+          <button type="button" class="donate-preset" data-amount="25">$25</button>
+          <button type="button" class="donate-preset" data-amount="50">$50</button>
+          <button type="button" class="donate-preset" data-amount="100">$100</button>
+        </div>
+        <input type="number" id="donate-amount" class="donate-amount-input" placeholder="Custom amount (AUD) — minimum $1" min="1" step="0.01" required>
+        <div id="paypal-button-container"></div>
+      </form>
+
       <div class="secure-pay-badge" aria-label="Secure payment processing">
         <span aria-hidden="true">&#128274;</span>
         <span>Secured by PayPal</span>
@@ -464,19 +522,60 @@
     });
 
     if (typeof paypal !== 'undefined') {
+      var donateForm = document.getElementById('donate-amount-form');
+      var donateAmountInput = document.getElementById('donate-amount');
+      var presetButtons = document.querySelectorAll('.donate-preset');
+      var currentAmount = '10.00';
+
+      function setAmount(value) {
+        currentAmount = value;
+        if (donateAmountInput) donateAmountInput.value = value;
+        presetButtons.forEach(function(btn) {
+          var btnAmount = btn.getAttribute('data-amount');
+          btn.setAttribute('aria-pressed', btnAmount === String(value) ? 'true' : 'false');
+        });
+      }
+
+      if (presetButtons.length) {
+        presetButtons.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            setAmount(btn.getAttribute('data-amount'));
+          });
+        });
+      }
+
+      if (donateAmountInput) {
+        donateAmountInput.addEventListener('input', function() {
+          var val = donateAmountInput.value.trim();
+          if (val) {
+            currentAmount = val;
+            presetButtons.forEach(function(btn) {
+              btn.setAttribute('aria-pressed', 'false');
+            });
+          }
+        });
+      }
+
+      if (presetButtons.length) setAmount('10');
+
       paypal.Buttons({
         style: {
           shape: 'rect',
-          label: 'paypal',
+          label: 'donate',
           fundingicons: true,
           layout: 'horizontal',
           tagline: false
         },
         createOrder: function(data, actions) {
+          var amount = parseFloat(currentAmount);
+          if (isNaN(amount) || amount <= 0) {
+            alert('Please select or enter a valid donation amount.');
+            throw new Error('Invalid donation amount');
+          }
           return actions.order.create({
             purchase_units: [{
               amount: {
-                value: '10.00',
+                value: amount.toFixed(2),
                 currency_code: 'AUD'
               }
             }]
@@ -486,6 +585,10 @@
           return actions.order.capture().then(function(details) {
             var name = (details.payer && details.payer.name && details.payer.name.given_name) ? details.payer.name.given_name : 'supporter';
             alert('Thank you, ' + name + '! Your donation was successful.');
+            if (donateForm) donateForm.reset();
+            presetButtons.forEach(function(btn) { btn.setAttribute('aria-pressed', 'false'); });
+            currentAmount = '10.00';
+            if (presetButtons.length) setAmount('10');
           });
         },
         onCancel: function() {
