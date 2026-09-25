@@ -751,9 +751,6 @@
           recycleForm.reportValidity();
           return;
         }
-        // NOTE: this only confirms in-page for now. Nothing is actually sent
-        // anywhere yet — wire this up to a form backend (Formspree, Netlify
-        // Forms, a small serverless endpoint, etc.) so submissions land somewhere.
         if (recycleConfirm) {
           recycleConfirm.style.display = 'block';
           recycleConfirm.scrollIntoView({ behavior:'smooth', block:'nearest' });
