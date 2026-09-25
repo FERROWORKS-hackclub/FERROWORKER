@@ -641,6 +641,7 @@
       var amountForm = document.getElementById('donate-amount-form');
       var donateStatus = document.getElementById('donate-status');
       var paypalContainer = document.getElementById('paypal-button-container');
+      var paypalRendered = false;
 
       function showDonateStatus(message, type) {
         if (!donateStatus) return;
@@ -666,33 +667,34 @@
 
       function resetDonateFlow() {
         clearDonateStatus();
-        if (paypalContainer) paypalContainer.style.display = 'block';
+        if (paypalContainer) {
+          paypalContainer.style.display = 'block';
+          paypalContainer.innerHTML = '';
+        }
         if (amountForm) amountForm.style.display = 'block';
         if (checkoutSection) checkoutSection.style.display = 'none';
         if (presetButtons.length) setAmount('10');
+        paypalRendered = false;
       }
 
       function showCheckout(amount) {
         clearDonateStatus();
-        if (paypalContainer) paypalContainer.style.display = 'block';
         if (checkoutAmountEl) checkoutAmountEl.textContent = amount.toFixed(2);
         if (amountForm) amountForm.style.display = 'none';
         if (checkoutSection) checkoutSection.style.display = 'block';
+        renderPayPalButton();
       }
 
-      if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', function() {
-          var raw = (donateAmountInput && donateAmountInput.value.trim()) ? donateAmountInput.value.trim() : currentAmount;
-          var amt = parseFloat(raw);
-          if (isNaN(amt) || amt <= 0) {
-            if (donateAmountInput) donateAmountInput.reportValidity();
-            return;
-          }
-          showCheckout(amt);
-        });
-      }
+      function renderPayPalButton() {
+        if (paypalRendered || !paypalContainer) return;
+        if (typeof paypal === 'undefined') {
+          var fallback = document.createElement('p');
+          fallback.className = 'donate-app-note';
+          fallback.textContent = "The PayPal button couldn't load (often an ad blocker). Try disabling it and refreshing, or use the HCB option above.";
+          paypalContainer.appendChild(fallback);
+          return;
+        }
 
-      if (typeof paypal !== 'undefined') {
         paypal.Buttons({
           style: {
             shape: 'rect',
@@ -731,12 +733,23 @@
           onError: function(err) {
             showDonateStatus('There was a problem processing your donation. Please try again later.', 'error');
           }
-        }).render('#paypal-button-container');
-      } else if (paypalContainer) {
-        var fallback = document.createElement('p');
-        fallback.className = 'donate-app-note';
-        fallback.textContent = "The PayPal button couldn't load (often an ad blocker). Try disabling it and refreshing, or use the HCB option above.";
-        paypalContainer.appendChild(fallback);
+        }).render('#paypal-button-container').catch(function(err) {
+          console.error('PayPal render error:', err);
+          showDonateStatus('Payment button failed to load. Please try again or use HCB.', 'error');
+        });
+        paypalRendered = true;
+      }
+
+      if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', function() {
+          var raw = (donateAmountInput && donateAmountInput.value.trim()) ? donateAmountInput.value.trim() : currentAmount;
+          var amt = parseFloat(raw);
+          if (isNaN(amt) || amt <= 0) {
+            if (donateAmountInput) donateAmountInput.reportValidity();
+            return;
+          }
+          showCheckout(amt);
+        });
       }
     })();
 
