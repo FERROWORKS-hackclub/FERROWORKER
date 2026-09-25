@@ -133,9 +133,54 @@
 
   .donate-app-cta:hover { background:#8c3815; border-color:#8c3815; text-decoration:none; }
 
-  #paypal-button-container { margin-top:18px; }
+  .donate-checkout-btn {
+    margin-top:12px;
+    padding:12px 18px;
+    border:1px solid var(--rust);
+    background:var(--rust);
+    color:var(--paper);
+    font-family:inherit;
+    font-size:.9rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+
+  .donate-checkout-btn:hover { background:#8c3815; border-color:#8c3815; }
 
   .donate-amount-form { margin-top:18px; }
+
+  .donate-checkout { margin-top:18px; }
+
+  .checkout-summary {
+    padding:18px;
+    border:1px solid var(--rule);
+    margin-bottom:18px;
+  }
+
+  .checkout-summary b { font-weight:600; }
+
+  .checkout-note {
+    margin-top:14px;
+    color:var(--ink-soft);
+    font-size:.9rem;
+  }
+
+  .cost {
+    margin-top:10px;
+    font-family:'Fraunces', serif;
+    font-size:2.2rem;
+    font-weight:600;
+  }
+
+  .cost sup {
+    margin-right:4px;
+    color:var(--ink-soft);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:1rem;
+  }
+
+  #paypal-button-container { margin-top:18px; }
 
   .donate-label {
     display:block;
@@ -444,8 +489,21 @@
           <button type="button" class="donate-preset" data-amount="100">$100</button>
         </div>
         <input type="number" id="donate-amount" class="donate-amount-input" placeholder="Custom amount (AUD) — minimum $1" min="1" step="0.01" required>
-        <div id="paypal-button-container"></div>
+        <button type="button" class="donate-checkout-btn" id="donate-checkout-btn">Pay</button>
       </form>
+
+      <div class="donate-checkout" id="donate-checkout" style="display:none;">
+        <div class="checkout-summary">
+          <b>You are donating to FERROWORKER</b>
+          <div class="cost"><sup>AUD</sup><span id="checkout-amount">10.00</span></div>
+        </div>
+        <div id="paypal-button-container"></div>
+        <div class="secure-pay-badge" aria-label="Secure payment processing">
+          <span aria-hidden="true">&#128274;</span>
+          <span>Secured by PayPal</span>
+        </div>
+        <p class="checkout-note">Payment is processed through PayPal's encrypted checkout.</p>
+      </div>
 
       <div class="secure-pay-badge" aria-label="Secure payment processing">
         <span aria-hidden="true">&#128274;</span>
@@ -509,7 +567,7 @@
   </footer>
 </div>
 
-  <script src="https://www.paypal.com/sdk/js?client-id=BAA6qyPwf1mskKbC9xt3YUZJHn8H8ptxiPBsdUQuvoK7ET-KMbomdOZJCBLJmSYyNh9N9QDfdDhS3pQZlo&currency=AUD"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=AUD"></script>
   <script>
     document.querySelectorAll('a[href^="#"]').forEach(function (link) {
       link.addEventListener('click', function (event) {
@@ -521,10 +579,9 @@
       });
     });
 
-    if (typeof paypal !== 'undefined') {
-      var donateForm = document.getElementById('donate-amount-form');
-      var donateAmountInput = document.getElementById('donate-amount');
+    (function () {
       var presetButtons = document.querySelectorAll('.donate-preset');
+      var donateAmountInput = document.getElementById('donate-amount');
       var currentAmount = '10.00';
 
       function setAmount(value) {
@@ -558,79 +615,71 @@
 
       if (presetButtons.length) setAmount('10');
 
-      paypal.Buttons({
-        style: {
-          shape: 'rect',
-          label: 'donate',
-          fundingicons: true,
-          layout: 'horizontal',
-          tagline: false
-        },
-        createOrder: function(data, actions) {
-          var amount = parseFloat(currentAmount);
-          if (isNaN(amount) || amount <= 0) {
+      var checkoutBtn = document.getElementById('donate-checkout-btn');
+      var checkoutSection = document.getElementById('donate-checkout');
+      var checkoutAmountEl = document.getElementById('checkout-amount');
+      var amountForm = document.getElementById('donate-amount-form');
+
+      function showCheckout(amount) {
+        if (checkoutAmountEl) checkoutAmountEl.textContent = amount.toFixed(2);
+        if (amountForm) amountForm.style.display = 'none';
+        if (checkoutSection) checkoutSection.style.display = 'block';
+      }
+
+      if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', function() {
+          var raw = (donateAmountInput && donateAmountInput.value.trim()) ? donateAmountInput.value.trim() : currentAmount;
+          var amt = parseFloat(raw);
+          if (isNaN(amt) || amt <= 0) {
             alert('Please select or enter a valid donation amount.');
-            throw new Error('Invalid donation amount');
+            return;
           }
-          return actions.order.create({
-            purchase_units: [{
-              amount: {
-                value: amount.toFixed(2),
-                currency_code: 'AUD'
-              }
-            }]
-          });
-        },
-        onApprove: function(data, actions) {
-          return actions.order.capture().then(function(details) {
-            var name = (details.payer && details.payer.name && details.payer.name.given_name) ? details.payer.name.given_name : 'supporter';
-            alert('Thank you, ' + name + '! Your donation was successful.');
-            if (donateForm) donateForm.reset();
-            presetButtons.forEach(function(btn) { btn.setAttribute('aria-pressed', 'false'); });
-            currentAmount = '10.00';
-            if (presetButtons.length) setAmount('10');
-          });
-        },
-        onCancel: function() {
-          alert('Donation cancelled. If you changed your mind, you can try again.');
-        },
-        onError: function(err) {
-          alert('There was a problem processing your donation. Please try again later.');
-        }
-      }).render('#paypal-button-container');
-    }
+          showCheckout(amt);
+        });
+      }
 
-  (function () {
-    var recycleForm = document.getElementById('recycle-form');
-    var recycleConfirm = document.getElementById('recycle-confirm');
-
-    if (recycleForm) {
-      recycleForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        var name = document.getElementById('recycle-name').value.trim();
-        var email = document.getElementById('recycle-email').value.trim();
-        var phone = document.getElementById('recycle-phone').value.trim();
-        var location = document.getElementById('recycle-location').value;
-        var printer = document.getElementById('recycle-printer').value.trim();
-        var details = document.getElementById('recycle-details').value.trim();
-
-        var subject = encodeURIComponent('Printer Donation Request - ' + printer);
-        var body = encodeURIComponent(
-          'Name: ' + name + '\n' +
-          'Email: ' + email + '\n' +
-          'Phone: ' + phone + '\n' +
-          'Location: ' + location + '\n' +
-          'Printer: ' + printer + '\n\n' +
-          'Details:\n' + details
-        );
-
-        window.location.href = 'mailto:ferroworks@outlook.com.au?subject=' + subject + '&body=' + body;
-
-        if (recycleConfirm) recycleConfirm.style.display = 'block';
-        recycleForm.reset();
-      });
-    }
-  })();
-</script>
+      if (typeof paypal !== 'undefined') {
+        paypal.Buttons({
+          style: {
+            shape: 'rect',
+            label: 'donate',
+            fundingicons: true,
+            layout: 'horizontal',
+            tagline: false
+          },
+          createOrder: function(data, actions) {
+            var amt = checkoutAmountEl ? parseFloat(checkoutAmountEl.textContent) : parseFloat(currentAmount);
+            if (isNaN(amt) || amt <= 0) {
+              alert('Invalid donation amount.');
+              throw new Error('Invalid donation amount');
+            }
+            return actions.order.create({
+              purchase_units: [{
+                amount: {
+                  value: amt.toFixed(2),
+                  currency_code: 'AUD'
+                }
+              }]
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+              var name = (details.payer && details.payer.name && details.payer.name.given_name) ? details.payer.name.given_name : 'supporter';
+              alert('Thank you, ' + name + '! Your donation was successful.');
+              if (amountForm) amountForm.style.display = 'block';
+              if (checkoutSection) checkoutSection.style.display = 'none';
+              if (presetButtons.length) setAmount('10');
+            });
+          },
+          onCancel: function() {
+            alert('Donation cancelled. If you changed your mind, you can try again.');
+          },
+          onError: function(err) {
+            alert('There was a problem processing your donation. Please try again later.');
+          }
+        }).render('#paypal-button-container');
+      }
+    })();
+  </script>
 </body>
 </html>
