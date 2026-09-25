@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <title>FERROWORKER</title>
@@ -244,6 +243,31 @@
     margin-top:14px;
     color:var(--ink-soft);
     font-size:.9rem;
+  }
+
+  .donate-status {
+    margin-top:14px;
+    padding:12px 14px;
+    border:1px solid var(--rule);
+    color:var(--ink-soft);
+    font-size:.9rem;
+    display:none;
+  }
+
+  .donate-status.show { display:block; }
+  .donate-status.error { border-color:var(--rust); color:var(--rust); }
+
+  .donate-again {
+    display:inline-block;
+    margin-top:10px;
+    color:var(--rust);
+    font-size:.85rem;
+    text-decoration:underline;
+    cursor:pointer;
+    background:none;
+    border:none;
+    padding:0;
+    font-family:inherit;
   }
 
   .recycle-card {
@@ -498,11 +522,7 @@
           <div class="cost"><sup>AUD</sup><span id="checkout-amount">10.00</span></div>
         </div>
         <div id="paypal-button-container"></div>
-        <div class="secure-pay-badge" aria-label="Secure payment processing">
-          <span aria-hidden="true">&#128274;</span>
-          <span>Secured by PayPal</span>
-        </div>
-        <p class="checkout-note">Payment is processed through PayPal's encrypted checkout.</p>
+        <div class="donate-status" id="donate-status" role="status" aria-live="polite"></div>
       </div>
 
       <div class="secure-pay-badge" aria-label="Secure payment processing">
@@ -619,8 +639,42 @@
       var checkoutSection = document.getElementById('donate-checkout');
       var checkoutAmountEl = document.getElementById('checkout-amount');
       var amountForm = document.getElementById('donate-amount-form');
+      var donateStatus = document.getElementById('donate-status');
+      var paypalContainer = document.getElementById('paypal-button-container');
+
+      function showDonateStatus(message, type) {
+        if (!donateStatus) return;
+        donateStatus.textContent = '';
+        donateStatus.className = 'donate-status show' + (type ? ' ' + type : '');
+        donateStatus.appendChild(document.createTextNode(message));
+        if (type === 'success') {
+          var again = document.createElement('button');
+          again.type = 'button';
+          again.className = 'donate-again';
+          again.textContent = 'Make another donation';
+          again.addEventListener('click', resetDonateFlow);
+          donateStatus.appendChild(document.createElement('br'));
+          donateStatus.appendChild(again);
+        }
+      }
+
+      function clearDonateStatus() {
+        if (!donateStatus) return;
+        donateStatus.textContent = '';
+        donateStatus.className = 'donate-status';
+      }
+
+      function resetDonateFlow() {
+        clearDonateStatus();
+        if (paypalContainer) paypalContainer.style.display = 'block';
+        if (amountForm) amountForm.style.display = 'block';
+        if (checkoutSection) checkoutSection.style.display = 'none';
+        if (presetButtons.length) setAmount('10');
+      }
 
       function showCheckout(amount) {
+        clearDonateStatus();
+        if (paypalContainer) paypalContainer.style.display = 'block';
         if (checkoutAmountEl) checkoutAmountEl.textContent = amount.toFixed(2);
         if (amountForm) amountForm.style.display = 'none';
         if (checkoutSection) checkoutSection.style.display = 'block';
@@ -631,7 +685,7 @@
           var raw = (donateAmountInput && donateAmountInput.value.trim()) ? donateAmountInput.value.trim() : currentAmount;
           var amt = parseFloat(raw);
           if (isNaN(amt) || amt <= 0) {
-            alert('Please select or enter a valid donation amount.');
+            if (donateAmountInput) donateAmountInput.reportValidity();
             return;
           }
           showCheckout(amt);
@@ -650,7 +704,7 @@
           createOrder: function(data, actions) {
             var amt = checkoutAmountEl ? parseFloat(checkoutAmountEl.textContent) : parseFloat(currentAmount);
             if (isNaN(amt) || amt <= 0) {
-              alert('Invalid donation amount.');
+              showDonateStatus('Invalid donation amount.', 'error');
               throw new Error('Invalid donation amount');
             }
             return actions.order.create({
@@ -665,20 +719,47 @@
           onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
               var name = (details.payer && details.payer.name && details.payer.name.given_name) ? details.payer.name.given_name : 'supporter';
-              alert('Thank you, ' + name + '! Your donation was successful.');
-              if (amountForm) amountForm.style.display = 'block';
-              if (checkoutSection) checkoutSection.style.display = 'none';
-              if (presetButtons.length) setAmount('10');
+              showDonateStatus('Thank you, ' + name + '! Your donation went through.', 'success');
+              if (paypalContainer) paypalContainer.style.display = 'none';
+            }).catch(function() {
+              showDonateStatus('Payment could not be completed. Please try again.', 'error');
             });
           },
           onCancel: function() {
-            alert('Donation cancelled. If you changed your mind, you can try again.');
+            showDonateStatus('Donation cancelled. You can try again anytime.', 'info');
           },
           onError: function(err) {
-            alert('There was a problem processing your donation. Please try again later.');
+            showDonateStatus('There was a problem processing your donation. Please try again later.', 'error');
           }
         }).render('#paypal-button-container');
+      } else if (paypalContainer) {
+        var fallback = document.createElement('p');
+        fallback.className = 'donate-app-note';
+        fallback.textContent = "The PayPal button couldn't load (often an ad blocker). Try disabling it and refreshing, or use the HCB option above.";
+        paypalContainer.appendChild(fallback);
       }
+    })();
+
+    (function () {
+      var recycleForm = document.getElementById('recycle-form');
+      var recycleConfirm = document.getElementById('recycle-confirm');
+      if (!recycleForm) return;
+
+      recycleForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (!recycleForm.checkValidity()) {
+          recycleForm.reportValidity();
+          return;
+        }
+        // NOTE: this only confirms in-page for now. Nothing is actually sent
+        // anywhere yet — wire this up to a form backend (Formspree, Netlify
+        // Forms, a small serverless endpoint, etc.) so submissions land somewhere.
+        if (recycleConfirm) {
+          recycleConfirm.style.display = 'block';
+          recycleConfirm.scrollIntoView({ behavior:'smooth', block:'nearest' });
+        }
+        recycleForm.reset();
+      });
     })();
   </script>
 </body>
