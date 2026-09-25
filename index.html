@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 
 <title>FERROWORKER</title>
 <meta name="description" content="FERROWORKER is a 1m x 1m x 1m build size 3D printer and tool changer.">
@@ -130,6 +132,22 @@
   }
 
   .donate-app-cta:hover { background:#8c3815; border-color:#8c3815; text-decoration:none; }
+
+  #paypal-button-container { margin-top:18px; }
+
+  .secure-pay-badge {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:12px;
+    padding:8px 12px;
+    border:1px solid var(--rule);
+    background:transparent;
+    color:var(--ink-soft);
+    font-size:.8rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
 
   .donate-app-note {
     margin-top:14px;
@@ -368,9 +386,14 @@
     <section id="donate">
       <div class="sec-num">04</div>
       <h2>Support the Project</h2>
-      <p>If you want to help us build FERROWORKER, you can donate through Hack Club Bank. Every dollar goes toward parts, materials, and making the guide free for everyone.</p>
+      <p>If you want to help us build FERROWORKER, you can donate through Hack Club Bank or PayPal. Every dollar goes toward parts, materials, and making the guide free for everyone.</p>
       <a class="donate-app-cta" href="https://hcb.hackclub.com/donations/start/ferroworks" target="_blank" rel="noopener">Donate in the HCB app</a>
-      <p class="donate-app-note">This opens the official Hack Club Bank checkout. You will leave this site to complete your donation.</p>
+      <div id="paypal-button-container"></div>
+      <div class="secure-pay-badge" aria-label="Secure payment processing">
+        <span aria-hidden="true">&#128274;</span>
+        <span>Secured by PayPal</span>
+      </div>
+      <p class="donate-app-note">Both options are secure. PayPal payments are processed through PayPal's encrypted checkout; HCB opens in a new tab.</p>
     </section>
 
     <section id="recycle">
@@ -428,16 +451,51 @@
   </footer>
 </div>
 
-<script>
-  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-    link.addEventListener('click', function (event) {
-      var target = document.getElementById(link.getAttribute('href').slice(1));
-      if (target) {
-        event.preventDefault();
-        target.scrollIntoView({ behavior:'smooth', block:'start' });
-      }
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=AUD"></script>
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        var target = document.getElementById(link.getAttribute('href').slice(1));
+        if (target) {
+          event.preventDefault();
+          target.scrollIntoView({ behavior:'smooth', block:'start' });
+        }
+      });
     });
-  });
+
+    if (typeof paypal !== 'undefined') {
+      paypal.Buttons({
+        style: {
+          shape: 'rect',
+          label: 'paypal',
+          fundingicons: true,
+          layout: 'horizontal',
+          tagline: false
+        },
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: '10.00',
+                currency_code: 'AUD'
+              }
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            var name = (details.payer && details.payer.name && details.payer.name.given_name) ? details.payer.name.given_name : 'supporter';
+            alert('Thank you, ' + name + '! Your donation was successful.');
+          });
+        },
+        onCancel: function() {
+          alert('Donation cancelled. If you changed your mind, you can try again.');
+        },
+        onError: function(err) {
+          alert('There was a problem processing your donation. Please try again later.');
+        }
+      }).render('#paypal-button-container');
+    }
 
   (function () {
     var recycleForm = document.getElementById('recycle-form');
