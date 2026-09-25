@@ -682,7 +682,9 @@
         if (checkoutAmountEl) checkoutAmountEl.textContent = amount.toFixed(2);
         if (amountForm) amountForm.style.display = 'none';
         if (checkoutSection) checkoutSection.style.display = 'block';
-        renderPayPalButton();
+        requestAnimationFrame(function() {
+          renderPayPalButton();
+        });
       }
 
       function renderPayPalButton() {
@@ -695,48 +697,59 @@
           return;
         }
 
-        paypal.Buttons({
-          style: {
-            shape: 'rect',
-            label: 'donate',
-            fundingicons: true,
-            layout: 'horizontal',
-            tagline: false
-          },
-          createOrder: function(data, actions) {
-            var amt = checkoutAmountEl ? parseFloat(checkoutAmountEl.textContent) : parseFloat(currentAmount);
-            if (isNaN(amt) || amt <= 0) {
-              showDonateStatus('Invalid donation amount.', 'error');
-              throw new Error('Invalid donation amount');
+        console.log('renderPayPalButton: container visible =', paypalContainer.offsetParent !== null, 'paypal defined =', typeof paypal !== 'undefined');
+
+        try {
+          paypal.Buttons({
+            style: {
+              shape: 'rect',
+              label: 'donate',
+              fundingicons: true,
+              layout: 'horizontal',
+              tagline: false
+            },
+            createOrder: function(data, actions) {
+              var amt = checkoutAmountEl ? parseFloat(checkoutAmountEl.textContent) : parseFloat(currentAmount);
+              console.log('PayPal createOrder amount:', amt);
+              if (isNaN(amt) || amt <= 0) {
+                showDonateStatus('Invalid donation amount.', 'error');
+                throw new Error('Invalid donation amount');
+              }
+              return actions.order.create({
+                purchase_units: [{
+                  amount: {
+                    value: amt.toFixed(2),
+                    currency_code: 'AUD'
+                  }
+                }]
+              });
+            },
+            onApprove: function(data, actions) {
+              return actions.order.capture().then(function(details) {
+                var name = (details.payer && details.payer.name && details.payer.name.given_name) ? details.payer.name.given_name : 'supporter';
+                showDonateStatus('Thank you, ' + name + '! Your donation went through.', 'success');
+                if (paypalContainer) paypalContainer.style.display = 'none';
+              }).catch(function() {
+                showDonateStatus('Payment could not be completed. Please try again.', 'error');
+              });
+            },
+            onCancel: function() {
+              showDonateStatus('Donation cancelled. You can try again anytime.', 'info');
+            },
+            onError: function(err) {
+              console.error('PayPal button error:', err);
+              showDonateStatus('There was a problem processing your donation. Please try again later.', 'error');
             }
-            return actions.order.create({
-              purchase_units: [{
-                amount: {
-                  value: amt.toFixed(2),
-                  currency_code: 'AUD'
-                }
-              }]
-            });
-          },
-          onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-              var name = (details.payer && details.payer.name && details.payer.name.given_name) ? details.payer.name.given_name : 'supporter';
-              showDonateStatus('Thank you, ' + name + '! Your donation went through.', 'success');
-              if (paypalContainer) paypalContainer.style.display = 'none';
-            }).catch(function() {
-              showDonateStatus('Payment could not be completed. Please try again.', 'error');
-            });
-          },
-          onCancel: function() {
-            showDonateStatus('Donation cancelled. You can try again anytime.', 'info');
-          },
-          onError: function(err) {
-            showDonateStatus('There was a problem processing your donation. Please try again later.', 'error');
-          }
-        }).render('#paypal-button-container').catch(function(err) {
-          console.error('PayPal render error:', err);
+          }).render('#paypal-button-container').then(function() {
+            console.log('PayPal button rendered successfully');
+          }).catch(function(err) {
+            console.error('PayPal render error:', err);
+            showDonateStatus('Payment button failed to load. Please try again or use HCB.', 'error');
+          });
+        } catch (e) {
+          console.error('PayPal render exception:', e);
           showDonateStatus('Payment button failed to load. Please try again or use HCB.', 'error');
-        });
+        }
         paypalRendered = true;
       }
 
