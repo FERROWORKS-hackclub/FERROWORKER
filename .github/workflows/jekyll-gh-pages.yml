@@ -16,7 +16,6 @@ permissions:
   id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -35,8 +34,16 @@ jobs:
         with:
           source: ./
           destination: ./_site
+      - name: Copy .well-known folder to build output
+        run: |
+          if [ -d ".well-known" ]; then
+            cp -R .well-known ./_site/
+          fi
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+          include-hidden-files: true
 
   # Deployment job
   deploy:
