@@ -9,9 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Inject PayPal client ID
         env:
           PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           if [ -z "$PAYPAL_CLIENT_ID" ]; then
             echo "PAYPAL_CLIENT_ID secret is not set. Skipping injection."
@@ -23,4 +28,5 @@ jobs:
           git add index.html
           git diff --cached --quiet && echo "No changes to commit." && exit 0
           git commit -m "Inject PayPal client ID"
-          git push
+          git remote set-url origin "https://x-access-token:$TOKEN@github.com/$REPO.git"
+          git push origin HEAD:${{ github.ref_name }}
