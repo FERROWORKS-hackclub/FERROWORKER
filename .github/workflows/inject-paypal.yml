@@ -15,7 +15,6 @@ jobs:
         env:
           PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
           REPO: ${{ github.repository }}
-          ACTOR: ${{ github.actor }}
           TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           if [ -z "$PAYPAL_CLIENT_ID" ]; then
