@@ -1,789 +1,1412 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-
-<title>FERROWORKER</title>
-<meta name="description" content="FERROWORKER is a 1m x 1m x 1m build size 3D printer and tool changer.">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-<style>
-  :root {
-    --paper:#f3efe6;
-    --ink:#1c1a17;
-    --ink-soft:#5c574d;
-    --rule:#d8d1c1;
-    --rust:#b5451b;
-  }
-
-  * { box-sizing:border-box; }
-
-  html { scroll-behavior:smooth; }
-
-  body {
-    margin:0;
-    padding:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'IBM Plex Mono', monospace;
-    font-size:16px;
-    line-height:1.65;
-  }
-
-  ::selection { background:var(--rust); color:var(--paper); }
-  a { color:var(--rust); }
-  a:hover { text-decoration:none; }
-
-  .wrap {
-    max-width:680px;
-    margin:0 auto;
-    padding:64px 24px 40px;
-    animation: arrive .55s ease both;
-  }
-
-  header.page-head { margin-bottom:56px; }
-
-  .kicker {
-    display:flex;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-bottom:14px;
-    color:var(--ink-soft);
-    font-size:.75rem;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-  }
-
-  h1 {
-    margin:0 0 10px;
-    color:var(--ink);
-    font-family:'Fraunces', serif;
-    font-size:2.6rem;
-    font-weight:600;
-    line-height:1.05;
-    animation: title-in .65s ease both;
-  }
-
-  .tagline {
-    max-width:52ch;
-    margin-bottom:22px;
-    color:var(--ink-soft);
-    font-size:1rem;
-    animation: text-in .55s .14s ease both;
-  }
-
-  nav.toc {
-    display:flex;
-    flex-wrap:wrap;
-    gap:2px 18px;
-    margin-bottom:56px;
-    padding:14px 0;
-    border-top:1px solid var(--rule);
-    border-bottom:1px solid var(--rule);
-    font-size:.75rem;
-    letter-spacing:.04em;
-  }
-
-  nav.toc a { color:var(--ink-soft); text-decoration:none; }
-  nav.toc a:hover { color:var(--rust); }
-  nav.toc { animation: text-in .55s .22s ease both; }
-
-  .donate-iframe-wrap {
-    position:relative;
-    width:100%;
-    padding-bottom:120%;
-    height:0;
-    overflow:hidden;
-    border:1px solid var(--rule);
-    margin-top:18px;
-  }
-
-  .donate-iframe-wrap iframe {
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    border:0;
-  }
-
-  .donate-app-cta {
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    margin-top:18px;
-    padding:12px 18px;
-    border:1px solid var(--rust);
-    background:var(--rust);
-    color:var(--paper);
-    font-family:inherit;
-    font-size:.9rem;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    text-decoration:none;
-    cursor:pointer;
-  }
-
-  .donate-app-cta:hover { background:#8c3815; border-color:#8c3815; text-decoration:none; }
-
-  .donate-checkout-btn {
-    margin-top:12px;
-    padding:12px 18px;
-    border:1px solid var(--rust);
-    background:var(--rust);
-    color:var(--paper);
-    font-family:inherit;
-    font-size:.9rem;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    cursor:pointer;
-  }
-
-  .donate-checkout-btn:hover { background:#8c3815; border-color:#8c3815; }
-
-  .donate-amount-form { margin-top:18px; }
-
-  .donate-checkout { margin-top:18px; }
-
-  .checkout-summary {
-    padding:18px;
-    border:1px solid var(--rule);
-    margin-bottom:18px;
-  }
-
-  .checkout-summary b { font-weight:600; }
-
-  .checkout-note {
-    margin-top:14px;
-    color:var(--ink-soft);
-    font-size:.9rem;
-  }
-
-  .cost {
-    margin-top:10px;
-    font-family:'Fraunces', serif;
-    font-size:2.2rem;
-    font-weight:600;
-  }
-
-  .cost sup {
-    margin-right:4px;
-    color:var(--ink-soft);
-    font-family:'IBM Plex Mono', monospace;
-    font-size:1rem;
-  }
-
-  #paypal-button-container { margin-top:18px; }
-
-  .donate-label {
-    display:block;
-    margin-bottom:10px;
-    color:var(--ink-soft);
-    font-size:.85rem;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-  }
-
-  .donate-presets {
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-bottom:10px;
-  }
-
-  .donate-preset {
-    padding:8px 12px;
-    border:1px solid var(--rule);
-    background:transparent;
-    color:var(--ink);
-    font-family:inherit;
-    font-size:.9rem;
-    cursor:pointer;
-  }
-
-  .donate-preset:hover,
-  .donate-preset[aria-pressed="true"] {
-    border-color:var(--rust);
-    color:var(--rust);
-  }
-
-  .donate-amount-input {
-    font-family:inherit;
-    font-size:1rem;
-    padding:10px 12px;
-    border:1px solid var(--rule);
-    background:transparent;
-    color:var(--ink);
-    outline:none;
-    width:100%;
-    max-width:220px;
-  }
-
-  .secure-pay-badge {
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    margin-top:12px;
-    padding:8px 12px;
-    border:1px solid var(--rule);
-    background:transparent;
-    color:var(--ink-soft);
-    font-size:.8rem;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-  }
-
-  .donate-app-note {
-    margin-top:14px;
-    color:var(--ink-soft);
-    font-size:.9rem;
-  }
-
-  .donate-status {
-    margin-top:14px;
-    padding:12px 14px;
-    border:1px solid var(--rule);
-    color:var(--ink-soft);
-    font-size:.9rem;
-    display:none;
-  }
-
-  .donate-status.show { display:block; }
-  .donate-status.error { border-color:var(--rust); color:var(--rust); }
-
-  .donate-again {
-    display:inline-block;
-    margin-top:10px;
-    color:var(--rust);
-    font-size:.85rem;
-    text-decoration:underline;
-    cursor:pointer;
-    background:none;
-    border:none;
-    padding:0;
-    font-family:inherit;
-  }
-
-  .recycle-card {
-    padding:18px 0;
-    border-bottom:1px solid var(--rule);
-  }
-
-  .recycle-card:last-child { border-bottom:none; }
-
-  .recycle-card b { font-weight:600; }
-
-  .recycle-note {
-    margin-top:18px;
-    padding-left:16px;
-    border-left:2px solid var(--rust);
-    color:var(--ink-soft);
-    font-size:.9rem;
-  }
-
-  .recycle-form {
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    margin-top:18px;
-    padding-top:18px;
-    border-top:1px solid var(--rule);
-  }
-
-  .recycle-form input,
-  .recycle-form textarea,
-  .recycle-form select {
-    font-family:inherit;
-    font-size:.95rem;
-    padding:10px 12px;
-    border:1px solid var(--rule);
-    background:transparent;
-    color:var(--ink);
-    outline:none;
-  }
-
-  .recycle-form textarea { resize:vertical; min-height:90px; }
-
-  .recycle-form button {
-    align-self:flex-start;
-    padding:10px 16px;
-    border:1px solid var(--rust);
-    background:var(--rust);
-    color:var(--paper);
-    font-family:inherit;
-    font-size:.85rem;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    cursor:pointer;
-  }
-
-  .recycle-form button:hover { background:#8c3815; border-color:#8c3815; }
-
-  .recycle-confirm {
-    margin-top:12px;
-    color:var(--ink-soft);
-    font-size:.92rem;
-  }
-
-  section {
-    margin-bottom:56px;
-    animation: section-in .45s ease both;
-  }
-
-  section:nth-of-type(2) { animation-delay:.06s; }
-  section:nth-of-type(3) { animation-delay:.12s; }
-  section:nth-of-type(4) { animation-delay:.18s; }
-  section:nth-of-type(5) { animation-delay:.24s; }
-
-  .sec-num {
-    margin-bottom:6px;
-    color:var(--rust);
-    font-size:.75rem;
-    letter-spacing:.08em;
-  }
-
-  h2 {
-    margin:0 0 18px;
-    font-family:'Fraunces', serif;
-    font-size:1.5rem;
-    font-weight:600;
-  }
-
-  p { max-width:64ch; margin:0 0 14px; }
-
-  ul.plain {
-    margin:0;
-    padding-left:0;
-    list-style:none;
-  }
-
-  ul.plain li {
-    padding:14px 0;
-    border-bottom:1px solid var(--rule);
-    transition:color .2s ease, padding-left .2s ease;
-  }
-
-  ul.plain li:hover {
-    padding-left:6px;
-    color:var(--rust);
-  }
-
-  ul.plain li:first-child { padding-top:0; }
-  .li-head { display:flex; justify-content:space-between; gap:12px; margin-bottom:4px; }
-  .li-head b { font-weight:600; }
-
-  .bom-note {
-    margin-top:18px;
-    padding-left:16px;
-    border-left:2px solid var(--rust);
-    color:var(--ink-soft);
-    font-size:.9rem;
-  }
-
-  .cost {
-    margin-bottom:6px;
-    font-family:'Fraunces', serif;
-    font-size:2.2rem;
-    font-weight:600;
-  }
-
-  .cost sup {
-    margin-right:4px;
-    color:var(--ink-soft);
-    font-family:'IBM Plex Mono', monospace;
-    font-size:1rem;
-  }
-
-  footer {
-    display:flex;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:20px;
-    padding-top:20px;
-    border-top:1px solid var(--rule);
-    color:var(--ink-soft);
-    font-size:.78rem;
-  }
-
-  footer a { color:var(--ink-soft); }
-  footer a:hover { color:var(--rust); }
-
-  @keyframes arrive {
-    from { opacity:0; }
-    to { opacity:1; }
-  }
-
-  @keyframes section-in {
-    from { opacity:0; }
-    to { opacity:1; }
-  }
-
-  @keyframes title-in {
-    from { opacity:0; transform:translateY(6px); }
-    to { opacity:1; transform:translateY(0); }
-  }
-
-  @keyframes text-in {
-    from { opacity:0; }
-    to { opacity:1; }
-  }
-
-  @media (prefers-reduced-motion:reduce) {
-    *, *::before, *::after {
-      animation:none !important;
-      transition:none !important;
-    }
-  }
-
-  @media (max-width:520px) {
-    .wrap { padding-top:38px; }
-    .kicker { display:block; }
-    .kicker span { display:block; margin-bottom:4px; }
-    footer { display:block; }
-    footer div + div { margin-top:10px; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>FERROWORKER</title>
+    <meta name="description" content="FERROWORKER is a 1m x 1m x 1m build size 3D printer and tool changer.">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --bg: #fffdf5;
+            --black: #000000;
+            --white: #ffffff;
+            --rust: #b5451b;
+            --yellow: #ffd166;
+            --green: #06d6a0;
+            --cyan: #118ab2;
+            --orange: #ff9f1c;
+
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: "IBM Plex Mono", "Courier New", Courier, monospace;
+            --shadow: 5px 5px 0px #000000;
+            --shadow-lg: 8px 8px 0px #000000;
+            --border: 3px solid #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--black);
+            font-family: var(--font-mono);
+            line-height: 1.5;
+            padding: 1.5rem 1rem;
+            display: flex;
+            justify-content: center;
+            background-image: radial-gradient(#d3cebf 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+        }
+
+        ::selection {
+            background-color: var(--rust);
+            color: var(--white);
+        }
+
+        a {
+            color: var(--rust);
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--rust);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            z-index: 100;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            text-decoration: none;
+            border: var(--border);
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        .wrapper {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-badge {
+            background-color: var(--rust);
+            color: var(--white);
+            font-family: var(--font-mono);
+            font-weight: 900;
+            padding: 0.4rem 0.8rem;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--black);
+            text-decoration: none;
+            background: var(--white);
+            border: var(--border);
+            padding: 0.3rem 0.6rem;
+            box-shadow: 3px 3px 0px #000;
+            font-size: 0.85rem;
+            transition: all 0.1s ease;
+        }
+
+        .nav-link:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px #000;
+            background: var(--yellow);
+            color: var(--black);
+            text-decoration: none;
+        }
+
+        .nav-link:focus-visible {
+            outline: 2px solid var(--rust);
+            outline-offset: 2px;
+        }
+
+        .nav-link.active {
+            background: var(--yellow);
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .hero {
+            background: var(--white);
+            border: var(--border);
+            box-shadow: var(--shadow-lg);
+            padding: 2.5rem 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .tag-pill {
+            display: inline-block;
+            background-color: var(--yellow);
+            color: var(--black);
+            font-family: var(--font-mono);
+            font-weight: bold;
+            font-size: 0.85rem;
+            padding: 0.25rem 0.6rem;
+            border: var(--border);
+            box-shadow: 3px 3px 0px #000;
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 7vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+            font-family: var(--font-sans);
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 3vw, 1.35rem);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            max-width: 720px;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            background-color: var(--rust);
+            color: var(--white);
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-decoration: none;
+            padding: 0.9rem 1.8rem;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            text-transform: uppercase;
+            transition: all 0.1s ease;
+            cursor: pointer;
+        }
+
+        .btn-cta:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 8px 8px 0px #000;
+            background-color: #8c3815;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .btn-cta:active {
+            transform: translate(3px, 3px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .btn-cta:focus-visible {
+            outline: 2px solid var(--yellow);
+            outline-offset: 2px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-sans);
+        }
+
+        .section-title::before {
+            content: "";
+            display: inline-block;
+            width: 16px;
+            height: 32px;
+            background-color: var(--rust);
+            border: 2px solid #000;
+        }
+
+        .sec-num {
+            margin-bottom: 6px;
+            color: var(--rust);
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        section {
+            margin-bottom: 3.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .card {
+            background: var(--white);
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: transform 0.1s ease;
+        }
+
+        .card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-badge {
+            font-family: var(--font-mono);
+            font-weight: 900;
+            font-size: 0.8rem;
+            padding: 0.2rem 0.5rem;
+            border: var(--border);
+            box-shadow: 2px 2px 0px #000;
+            text-transform: uppercase;
+        }
+
+        .card-badge.yellow { background-color: var(--yellow); }
+        .card-badge.green { background-color: var(--green); }
+        .card-badge.cyan { background-color: var(--cyan); color: var(--white); }
+        .card-badge.rust { background-color: var(--rust); color: var(--white); }
+        .card-badge.orange { background-color: var(--orange); }
+
+        .card h3 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            font-family: var(--font-sans);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        .card li {
+            font-weight: 600;
+            font-size: 0.98rem;
+            margin-bottom: 0.5rem;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+
+        .card li::before {
+            content: "-";
+            position: absolute;
+            left: 0;
+            color: var(--rust);
+            font-weight: bold;
+        }
+
+        .card-description {
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .progress-bar-wrap {
+            background: var(--white);
+            border: var(--border);
+            box-shadow: var(--shadow-lg);
+            padding: 1.8rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .progress-label {
+            font-family: var(--font-mono);
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1rem;
+        }
+
+        .progress-percent {
+            font-family: var(--font-mono);
+            font-weight: 900;
+            font-size: 1.2rem;
+            background: var(--yellow);
+            border: var(--border);
+            box-shadow: 2px 2px 0px #000;
+            padding: 0.2rem 0.6rem;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 28px;
+            background: var(--bg);
+            border: var(--border);
+            box-shadow: 3px 3px 0px #000;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--rust);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-fill.green { background: var(--green); }
+        .progress-fill.cyan { background: var(--cyan); }
+        .progress-fill.yellow { background: var(--yellow); }
+
+        .updates-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .update-item {
+            background: var(--white);
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+            transition: transform 0.1s ease;
+        }
+
+        .update-item:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .update-date {
+            font-family: var(--font-mono);
+            font-weight: 900;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            white-space: nowrap;
+            background: var(--yellow);
+            border: var(--border);
+            box-shadow: 2px 2px 0px #000;
+            padding: 0.25rem 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .update-date.green { background: var(--green); }
+        .update-date.cyan { background: var(--cyan); color: var(--white); }
+        .update-date.rust { background: var(--rust); color: var(--white); }
+        .update-date.orange { background: var(--orange); }
+
+        .update-content {
+            flex: 1;
+        }
+
+        .update-content p {
+            margin: 0;
+            font-weight: 600;
+            font-size: 0.98rem;
+        }
+
+        .cost {
+            margin-top: 10px;
+            font-family: var(--font-sans);
+            font-size: 2.2rem;
+            font-weight: 600;
+        }
+
+        .cost sup {
+            margin-right: 4px;
+            color: #5c574d;
+            font-family: var(--font-mono);
+            font-size: 1rem;
+        }
+
+        ul.plain {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        ul.plain li {
+            padding: 14px 0;
+            border-bottom: 1px solid #d8d1c1;
+            font-weight: 600;
+            font-size: 0.98rem;
+        }
+
+        ul.plain li:last-child { border-bottom: none; }
+
+        .li-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .li-head b { font-weight: 600; }
+
+        .bom-note {
+            margin-top: 18px;
+            padding-left: 16px;
+            border-left: 2px solid var(--rust);
+            color: #5c574d;
+            font-size: 0.9rem;
+        }
+
+        .donate-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 18px;
+            padding: 12px 18px;
+            border: var(--border);
+            background: var(--rust);
+            color: var(--white);
+            font-family: inherit;
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .donate-cta:hover { background: #8c3815; text-decoration: none; color: var(--white); }
+
+        .donate-amount-form { margin-top: 18px; }
+
+        .donate-label {
+            display: block;
+            margin-bottom: 10px;
+            color: #5c574d;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .donate-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .donate-preset {
+            padding: 8px 12px;
+            border: var(--border);
+            background: var(--white);
+            color: var(--black);
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .donate-preset:hover,
+        .donate-preset[aria-pressed="true"] {
+            background: var(--yellow);
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0px #000;
+        }
+
+        .donate-amount-input {
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 10px 12px;
+            border: var(--border);
+            background: var(--bg);
+            color: var(--black);
+            outline: none;
+            width: 100%;
+            max-width: 220px;
+            box-shadow: 3px 3px 0px #000;
+        }
+
+        .donate-checkout-btn {
+            margin-top: 12px;
+            padding: 12px 18px;
+            border: var(--border);
+            background: var(--rust);
+            color: var(--white);
+            font-family: inherit;
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .donate-checkout-btn:hover { background: #8c3815; transform: translate(-1px, -1px); box-shadow: 4px 4px 0px #000; }
+
+        .checkout-summary {
+            padding: 18px;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 18px;
+            background: var(--white);
+        }
+
+        .donate-status {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            color: #5c574d;
+            font-size: 0.9rem;
+            display: none;
+            background: var(--white);
+        }
+
+        .donate-status.show { display: block; }
+        .donate-status.error { border-color: var(--rust); color: var(--rust); }
+
+        .secure-pay-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 8px 12px;
+            border: var(--border);
+            box-shadow: 2px 2px 0px #000;
+            background: var(--white);
+            color: #5c574d;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .recycle-form input,
+        .recycle-form textarea,
+        .recycle-form select {
+            font-family: inherit;
+            font-size: 0.95rem;
+            padding: 10px 12px;
+            border: var(--border);
+            box-shadow: 3px 3px 0px #000;
+            background: var(--bg);
+            color: var(--black);
+            outline: none;
+            width: 100%;
+            margin-bottom: 0.8rem;
+        }
+
+        .recycle-form textarea { resize: vertical; min-height: 90px; }
+
+        .recycle-form button[type="submit"] {
+            padding: 10px 16px;
+            border: var(--border);
+            background: var(--rust);
+            color: var(--white);
+            font-family: inherit;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .recycle-form button[type="submit"]:hover { background: #8c3815; transform: translate(-1px, -1px); box-shadow: 4px 4px 0px #000; }
+
+        .recycle-confirm {
+            margin-top: 12px;
+            color: #5c574d;
+            font-size: 0.92rem;
+            padding: 10px 14px;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            background: var(--green);
+            display: none;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: var(--border);
+            color: #5c574d;
+            font-size: 0.78rem;
+            background: var(--white);
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 1.2rem 1.5rem;
+        }
+
+        footer a { color: var(--rust); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--rust);
+            color: var(--white);
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 0.6rem 1rem;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            z-index: 50;
+            font-size: 0.9rem;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: #8c3815;
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px #000;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        @keyframes arrive {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes title-in {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes text-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-link {
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            nav {
+                flex-wrap: nowrap;
+            }
+
+            .update-item {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            footer {
+                flex-direction: column;
+            }
+        }
+
+        .nav-toggle {
+            display: none;
+            background: var(--white);
+            border: var(--border);
+            box-shadow: 3px 3px 0px #000;
+            padding: 0.4rem 0.8rem;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .nav-toggle:hover {
+            background: var(--yellow);
+        }
+
+        @media print {
+            body {
+                background: white;
+                background-image: none;
+                padding: 0;
+            }
+
+            .back-to-top,
+            .nav-toggle {
+                display: none;
+            }
+
+            .card,
+            .update-item,
+            footer,
+            .hero,
+            .progress-bar-wrap {
+                box-shadow: none;
+                border: 1px solid #000;
+                break-inside: avoid;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        .marquee {
+            background: var(--black);
+            color: var(--yellow);
+            padding: 0.8rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: var(--green);
+            border: 2px solid #000;
+            margin-right: 0.5rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        .milestone-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--green);
+            border: var(--border);
+            box-shadow: 2px 2px 0px #000;
+            font-weight: 900;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+
+        .milestone-pending {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--yellow);
+            border: var(--border);
+            box-shadow: 2px 2px 0px #000;
+            font-weight: 900;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .task-list li {
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed #000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .task-list li:last-child { border-bottom: none; }
+
+        .interactive-btn {
+            background: var(--yellow);
+            border: var(--border);
+            box-shadow: 3px 3px 0px #000;
+            padding: 0.5rem 1rem;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .interactive-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px #000;
+            background: var(--orange);
+        }
+
+        .interactive-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000;
+        }
+    </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<div class="wrap">
-  <header class="page-head">
-    <div class="kicker">
-      <span>made by Riley Wood &amp; sami</span>
-    </div>
-    <h1>FERROWORKER</h1>
-    <p class="tagline">A 1m x 1m x 1m build size 3D printer that can be assembled in 5 days.</p>
-  </header>
+    <div class="wrapper">
+        <nav aria-label="Main navigation">
+            <div class="nav-badge">FERROWORKER</div>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="navLinks" onclick="toggleNav()" aria-label="Toggle navigation menu">MENU</button>
+            <div class="nav-links" id="navLinks">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#bom" class="nav-link">BOM</a>
+                <a href="#progress" class="nav-link">Progress</a>
+                <a href="#donate" class="nav-link">Donate</a>
+                <a href="#recycle" class="nav-link">Recycle</a>
+            </div>
+        </nav>
 
-  <nav class="toc" aria-label="Page navigation">
-    <a href="#about">About</a>
-    <a href="#features">Features</a>
-    <a href="#bom">Cost &amp; BOM</a>
-    <a href="#donate">Donate</a>
-    <a href="#recycle">Recycle</a>
-  </nav>
-
-  <main>
-    <section id="about">
-      <div class="sec-num">01</div>
-      <h2>About the Project</h2>
-      <p>The FERROWORKER will be a 1m x 1m x 1m build size 3D printer that can be assembled in 5 days, with the target builder being 14. We will make a full guide to assembly.</p>
-    </section>
-
-    <section id="features">
-      <div class="sec-num">02</div>
-      <h2>Tool Changer</h2>
-      <p>The project will have a tool changer built into one, featuring:</p>
-      <ul class="plain">
-        <li><div class="li-head"><b>3D Printer</b></div></li>
-        <li><div class="li-head"><b>Laser Cutter</b></div></li>
-        <li><div class="li-head"><b>CNC Drill</b></div></li>
-      </ul>
-    </section>
-
-    <section id="bom">
-      <div class="sec-num">03</div>
-      <h2>Cost &amp; BOM</h2>
-      <div class="cost"><sup>USD</sup>&lt; 900</div>
-      <p>We will also be making it under 900 USD in parts so it is affordable.</p>
-      <div class="bom-note">
-        <b>BOM Status:</b> I am still adding things to the README, BOM, and the 3D models. This is not even close to finished, this is just the start of this project.
-      </div>
-    </section>
-
-    <section id="donate">
-      <div class="sec-num">04</div>
-      <h2>Support the Project</h2>
-      <p>If you want to help us build FERROWORKER, you can donate through Hack Club Bank or PayPal. Every dollar goes toward parts, materials, and making the guide free for everyone.</p>
-      <a class="donate-app-cta" href="https://hcb.hackclub.com/donations/start/ferroworks" target="_blank" rel="noopener">Donate in the HCB app</a>
-
-      <form class="donate-amount-form" id="donate-amount-form" autocomplete="off">
-         <label class="donate-label" for="donate-amount">Donation amount (USD)</label>
-        <div class="donate-presets" role="group" aria-label="Preset donation amounts">
-          <button type="button" class="donate-preset" data-amount="10">$10</button>
-          <button type="button" class="donate-preset" data-amount="25">$25</button>
-          <button type="button" class="donate-preset" data-amount="50">$50</button>
-          <button type="button" class="donate-preset" data-amount="100">$100</button>
+        <div class="marquee">
+            <div class="marquee-content">
+                BUILD IN PROGRESS • OPEN SOURCE HARDWARE • TARGET: 5 DAYS ASSEMBLY • 1M CUBE BUILD VOLUME • TOOL CHANGER • FERROWORKER • BUILD IN PROGRESS • OPEN SOURCE HARDWARE • TARGET: 5 DAYS ASSEMBLY • 1M CUBE BUILD VOLUME • TOOL CHANGER • FERROWORKER •&nbsp;
+            </div>
         </div>
-         <input type="number" id="donate-amount" class="donate-amount-input" placeholder="Custom amount (USD) — minimum $1" min="1" step="0.01" required>
-        <button type="button" class="donate-checkout-btn" id="donate-checkout-btn">Pay</button>
-      </form>
 
-      <div class="donate-checkout" id="donate-checkout" style="display:none;">
-        <div class="checkout-summary">
-          <b>You are donating to FERROWORKER</b>
-           <div class="cost"><sup>USD</sup><span id="checkout-amount">10.00</span></div>
-        </div>
-        <div id="paypal-button-container"></div>
-        <div class="donate-status" id="donate-status" role="status" aria-live="polite"></div>
-      </div>
+        <header class="hero" id="main-content">
+            <div class="tag-pill"><span class="status-indicator"></span>Active Build</div>
+            <h1>FERROWORKER</h1>
+            <p>A 1m x 1m x 1m build size 3D printer with a built-in tool changer. Assemble it in 5 days, target builder age 14, with a full open-source guide.</p>
+            <a href="https://hackclub.slack.com/archives/C0C0V63AW4R" class="btn-cta" target="_blank" rel="noopener noreferrer" aria-label="Join Slack Channel (opens in new tab)">Join Slack</a>
+            <a href="https://github.com/printingstupidity313/FERROWORKER" class="btn-cta" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub (opens in new tab)" style="margin-left: 1rem; background-color: var(--cyan);">GitHub</a>
+        </header>
 
-      <div class="secure-pay-badge" aria-label="Secure payment processing">
-        <span aria-hidden="true">&#128274;</span>
-        <span>Secured by PayPal</span>
-      </div>
-      <p class="donate-app-note">Both options are secure. PayPal payments are processed through PayPal's encrypted checkout; HCB opens in a new tab.</p>
-    </section>
+        <main>
+            <section id="about" aria-labelledby="about-title">
+                <div class="sec-num">01</div>
+                <h2 class="section-title" id="about-title">About the Project</h2>
+                <p>The FERROWORKER will be a 1m x 1m x 1m build size 3D printer that can be assembled in 5 days, with the target builder being 14. We will make a full guide to assembly.</p>
+            </section>
 
-    <section id="recycle">
-      <div class="sec-num">05</div>
-      <h2>Recycle Your 3D Printer</h2>
-      <p>Have an old, broken, or unused 3D printer? We will take it, harvest the good parts, and put them toward future FERROWORKER builds. This keeps e-waste out of landfill and lowers the cost of open-source 3D printing for everyone.</p>
-      <ul class="plain">
-        <li class="recycle-card">
-          <div class="li-head"><b>What we accept</b></div>
-          <span>FDM printers, extruders, hotends, stepper motors, rods, bearings, belts, and electronics. Broken or incomplete is fine.</span>
-        </li>
-        <li class="recycle-card">
-          <div class="li-head"><b>What we cannot accept</b></div>
-          <span>Resin vats, IPA-contaminated parts, or machines soaked in hazardous chemicals.</span>
-        </li>
-        <li class="recycle-card">
-          <div class="li-head"><b>Shipping policy</b></div>
-          <span>Australia: we pay for shipping. International: sender pays for shipping. We will provide a shipping label or drop-off details after confirming the donation.</span>
-        </li>
-        <li class="recycle-card">
-          <div class="li-head"><b>Drop-off / mailing address</b></div>
-          <span>Brisbane, Queensland, Australia. Exact address will be provided by email after your submission is accepted.</span>
-        </li>
-        <li class="recycle-card">
-          <div class="li-head"><b>Contact</b></div>
-          <span>Email <a href="mailto:ferroworks@outlook.com.au">ferroworks@outlook.com.au</a>. Please include photos and a short description of the printer.</span>
-        </li>
-      </ul>
+            <section id="features" aria-labelledby="features-title">
+                <div class="sec-num">02</div>
+                <h2 class="section-title" id="features-title">Tool Changer</h2>
+                <p>The project will have a tool changer built into one, featuring:</p>
+                <ul class="plain">
+                    <li><div class="li-head"><b>3D Printer</b></div></li>
+                    <li><div class="li-head"><b>Laser Cutter</b></div></li>
+                    <li><div class="li-head"><b>CNC Drill</b></div></li>
+                </ul>
+            </section>
 
-      <form class="recycle-form" id="recycle-form">
-        <input type="text" id="recycle-name" placeholder="Your name" required>
-        <input type="email" id="recycle-email" placeholder="Email address" required>
-        <input type="tel" id="recycle-phone" placeholder="Phone number">
-        <select id="recycle-location" required>
-          <option value="" disabled selected>Location</option>
-          <option value="australia">Australia</option>
-          <option value="international">International</option>
-        </select>
-        <input type="text" id="recycle-printer" placeholder="Printer make/model or short description" required>
-        <textarea id="recycle-details" placeholder="Condition, issues, included parts, and any useful details." required></textarea>
-        <button type="submit">Submit printer donation request</button>
-        <div class="recycle-confirm" id="recycle-confirm" style="display:none;">Request received. We will reply with next steps.</div>
-      </form>
+            <section id="bom" aria-labelledby="bom-title">
+                <div class="sec-num">03</div>
+                <h2 class="section-title" id="bom-title">Cost & BOM</h2>
+                <div class="cost"><sup>USD</sup>&lt; 900</div>
+                <p>We will also be making it under 900 USD in parts so it is affordable.</p>
+                <div class="bom-note">
+                    <b>BOM Status:</b> I am still adding things to the README, BOM, and the 3D models. This is not even close to finished, this is just the start of this project.
+                </div>
+            </section>
 
-    </section>
-  </main>
+            <section id="progress" aria-labelledby="progress-title">
+                <div class="sec-num">04</div>
+                <h2 class="section-title" id="progress-title">Progress & Updates</h2>
 
-  <footer>
-    <div>FERROWORKER · GPL-3.0 License · made by Riley Wood &amp; sami</div>
-    <div>
-      <a href="https://github.com/printingstupidity313/FERROWORKER" target="_blank" rel="noopener">GitHub ↗</a>
-      <span style="color:var(--rule);margin:0 8px;">|</span>
-      <a href="https://hackclub.slack.com/archives/C0C0V63AW4R" target="_blank" rel="noopener">Slack ↗</a>
+                <div class="progress-bar-wrap">
+                    <div class="progress-header">
+                        <span class="progress-label">Overall Build Progress</span>
+                        <span class="progress-percent" id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill" data-progress="25" style="width: 0%;"></div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button class="interactive-btn" onclick="animateProgress()">Animate Progress</button>
+                        <button class="interactive-btn" onclick="resetProgress()" style="margin-left: 0.5rem; background: var(--white);">Reset</button>
+                    </div>
+                </div>
+
+                <div class="updates-list">
+                    <div class="update-item">
+                        <span class="update-date">Oct 2026</span>
+                        <div class="update-content">
+                            <p>Project kickoff. Started drafting the overall frame concept and initial CAD sketches for the 1m cube build volume.</p>
+                        </div>
+                    </div>
+                    <div class="update-item">
+                        <span class="update-date green">Recent</span>
+                        <div class="update-content">
+                            <p>Published the first README draft and opened the GitHub repository for FERROWORKER. BOM is still being refined.</p>
+                        </div>
+                    </div>
+                    <div class="update-item">
+                        <span class="update-date cyan">Update</span>
+                        <div class="update-content">
+                            <p>Added tool changer design concepts. Currently evaluating three different tool mounting mechanisms for the print head.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-bar-wrap">
+                    <div class="progress-header">
+                        <span class="progress-label">Build Milestones</span>
+                    </div>
+                    <ul class="task-list">
+                        <li><span class="milestone-check">✓</span> Project conception & planning</li>
+                        <li><span class="milestone-check">✓</span> GitHub repository setup</li>
+                        <li><span class="milestone-pending">2</span> Frame design finalization</li>
+                        <li><span class="milestone-pending">3</span> Electronics selection</li>
+                        <li><span class="milestone-pending">4</span> BOM completion</li>
+                        <li><span class="milestone-pending">5</span> First prototype build</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="donate" aria-labelledby="donate-title">
+                <div class="sec-num">05</div>
+                <h2 class="section-title" id="donate-title">Support the Project</h2>
+                <p>If you want to help us build FERROWORKER, you can donate through Hack Club Bank or PayPal. Every dollar goes toward parts, materials, and making the guide free for everyone.</p>
+                <a class="donate-cta" href="https://hcb.hackclub.com/donations/start/ferroworks" target="_blank" rel="noopener">Donate in the HCB app</a>
+
+                <form class="donate-amount-form" id="donate-amount-form" autocomplete="off">
+                    <label class="donate-label" for="donate-amount">Donation amount (USD)</label>
+                    <div class="donate-presets" role="group" aria-label="Preset donation amounts">
+                        <button type="button" class="donate-preset" data-amount="10">$10</button>
+                        <button type="button" class="donate-preset" data-amount="25">$25</button>
+                        <button type="button" class="donate-preset" data-amount="50">$50</button>
+                        <button type="button" class="donate-preset" data-amount="100">$100</button>
+                    </div>
+                    <input type="number" id="donate-amount" class="donate-amount-input" placeholder="Custom amount (USD) — minimum $1" min="1" step="0.01" required>
+                    <button type="button" class="donate-checkout-btn" id="donate-checkout-btn">Pay</button>
+                </form>
+
+                <div class="checkout-summary" id="donate-checkout" style="display:none;">
+                    <b>You are donating to FERROWORKER</b>
+                    <div class="cost"><sup>USD</sup><span id="checkout-amount">10.00</span></div>
+                </div>
+                <div id="paypal-button-container"></div>
+                <div class="donate-status" id="donate-status" role="status" aria-live="polite"></div>
+
+                <div class="secure-pay-badge" aria-label="Secure payment processing">
+                    <span aria-hidden="true">&#128274;</span>
+                    <span>Secured by PayPal</span>
+                </div>
+                <p style="margin-top: 14px; color: #5c574d; font-size: 0.9rem;">Both options are secure. PayPal payments are processed through PayPal's encrypted checkout; HCB opens in a new tab.</p>
+            </section>
+
+            <section id="recycle" aria-labelledby="recycle-title">
+                <div class="sec-num">06</div>
+                <h2 class="section-title" id="recycle-title">Recycle Your 3D Printer</h2>
+                <p>Have an old, broken, or unused 3D printer? We will take it, harvest the good parts, and put them toward future FERROWORKER builds. This keeps e-waste out of landfill and lowers the cost of open-source 3D printing for everyone.</p>
+                <ul class="plain">
+                    <li class="recycle-card">
+                        <div class="li-head"><b>What we accept</b></div>
+                        <span>FDM printers, extruders, hotends, stepper motors, rods, bearings, belts, and electronics. Broken or incomplete is fine.</span>
+                    </li>
+                    <li class="recycle-card">
+                        <div class="li-head"><b>What we cannot accept</b></div>
+                        <span>Resin vats, IPA-contaminated parts, or machines soaked in hazardous chemicals.</span>
+                    </li>
+                    <li class="recycle-card">
+                        <div class="li-head"><b>Shipping policy</b></div>
+                        <span>Australia: we pay for shipping. International: sender pays for shipping. We will provide a shipping label or drop-off details after confirming the donation.</span>
+                    </li>
+                    <li class="recycle-card">
+                        <div class="li-head"><b>Drop-off / mailing address</b></div>
+                        <span>Brisbane, Queensland, Australia. Exact address will be provided by email after your submission is accepted.</span>
+                    </li>
+                    <li class="recycle-card">
+                        <div class="li-head"><b>Contact</b></div>
+                        <span>Email <a href="mailto:ferroworks@outlook.com.au">ferroworks@outlook.com.au</a>. Please include photos and a short description of the printer.</span>
+                    </li>
+                </ul>
+
+                <form class="recycle-form" id="recycle-form">
+                    <input type="text" id="recycle-name" placeholder="Your name" required>
+                    <input type="email" id="recycle-email" placeholder="Email address" required>
+                    <input type="tel" id="recycle-phone" placeholder="Phone number">
+                    <select id="recycle-location" required>
+                        <option value="" disabled selected>Location</option>
+                        <option value="australia">Australia</option>
+                        <option value="international">International</option>
+                    </select>
+                    <input type="text" id="recycle-printer" placeholder="Printer make/model or short description" required>
+                    <textarea id="recycle-details" placeholder="Condition, issues, included parts, and any useful details." required></textarea>
+                    <button type="submit">Submit printer donation request</button>
+                    <div class="recycle-confirm" id="recycle-confirm">Request received. We will reply with next steps.</div>
+                </form>
+            </section>
+        </main>
+
+        <footer>
+            <div>FERROWORKER · GPL-3.0 License · made by Riley Wood &amp; sami</div>
+            <div>
+                <a href="https://github.com/printingstupidity313/FERROWORKER" target="_blank" rel="noopener">GitHub ↗</a>
+                <span style="color:#d8d1c1;margin:0 8px;">|</span>
+                <a href="https://hackclub.slack.com/archives/C0C0V63AW4R" target="_blank" rel="noopener">Slack ↗</a>
+            </div>
+        </footer>
     </div>
-  </footer>
-</div>
 
-  <script src="https://www.paypal.com/sdk/js?client-id=BAA6qyPwf1mskKbC9xt3YUZJHn8H8ptxiPBsdUQuvoK7ET-KMbomdOZJCBLJmSYyNh9N9QDfdDhS3pQZlo&currency=USD&enable-funding=applepay"></script>
-  <script>
-    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-      link.addEventListener('click', function (event) {
-        var target = document.getElementById(link.getAttribute('href').slice(1));
-        if (target) {
-          event.preventDefault();
-          target.scrollIntoView({ behavior:'smooth', block:'start' });
-        }
-      });
-    });
-
-    (function () {
-      var presetButtons = document.querySelectorAll('.donate-preset');
-      var donateAmountInput = document.getElementById('donate-amount');
-      var currentAmount = '10.00';
-
-      function setAmount(value) {
-        currentAmount = value;
-        if (donateAmountInput) donateAmountInput.value = value;
-        presetButtons.forEach(function(btn) {
-          var btnAmount = btn.getAttribute('data-amount');
-          btn.setAttribute('aria-pressed', btnAmount === String(value) ? 'true' : 'false');
-        });
-      }
-
-      if (presetButtons.length) {
-        presetButtons.forEach(function(btn) {
-          btn.addEventListener('click', function() {
-            setAmount(btn.getAttribute('data-amount'));
-          });
-        });
-      }
-
-      if (donateAmountInput) {
-        donateAmountInput.addEventListener('input', function() {
-          var val = donateAmountInput.value.trim();
-          if (val) {
-            currentAmount = val;
-            presetButtons.forEach(function(btn) {
-              btn.setAttribute('aria-pressed', 'false');
+    <script src="https://www.paypal.com/sdk/js?client-id=BAA6qyPwf1mskKbC9xt3YUZJHn8H8ptxiPBsdUQuvoK7ET-KMbomdOZJCBLJmSYyNh9N9QDfdDhS3pQZlo&currency=USD&enable-funding=applepay"></script>
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                var target = document.getElementById(link.getAttribute('href').slice(1));
+                if (target) {
+                    event.preventDefault();
+                    target.scrollIntoView({ behavior:'smooth', block:'start' });
+                }
             });
-          }
         });
-      }
 
-      if (presetButtons.length) setAmount('10');
-
-      var checkoutBtn = document.getElementById('donate-checkout-btn');
-      var checkoutSection = document.getElementById('donate-checkout');
-      var checkoutAmountEl = document.getElementById('checkout-amount');
-      var amountForm = document.getElementById('donate-amount-form');
-      var donateStatus = document.getElementById('donate-status');
-      var paypalContainer = document.getElementById('paypal-button-container');
-      var paypalRendered = false;
-
-      function showDonateStatus(message, type) {
-        if (!donateStatus) return;
-        donateStatus.textContent = '';
-        donateStatus.className = 'donate-status show' + (type ? ' ' + type : '');
-        donateStatus.appendChild(document.createTextNode(message));
-        if (type === 'success') {
-          var again = document.createElement('button');
-          again.type = 'button';
-          again.className = 'donate-again';
-          again.textContent = 'Make another donation';
-          again.addEventListener('click', resetDonateFlow);
-          donateStatus.appendChild(document.createElement('br'));
-          donateStatus.appendChild(again);
+        function toggleNav() {
+            const navLinks = document.getElementById('navLinks');
+            const navToggle = document.querySelector('.nav-toggle');
+            navLinks.classList.toggle('open');
+            const isExpanded = navLinks.classList.contains('open');
+            navToggle.setAttribute('aria-expanded', isExpanded);
+            navToggle.textContent = isExpanded ? 'X' : 'MENU';
         }
-      }
 
-      function clearDonateStatus() {
-        if (!donateStatus) return;
-        donateStatus.textContent = '';
-        donateStatus.className = 'donate-status';
-      }
-
-      function resetDonateFlow() {
-        clearDonateStatus();
-        if (paypalContainer) {
-          paypalContainer.style.display = 'block';
-          paypalContainer.innerHTML = '';
-        }
-        if (amountForm) amountForm.style.display = 'block';
-        if (checkoutSection) checkoutSection.style.display = 'none';
-        if (presetButtons.length) setAmount('10');
-        paypalRendered = false;
-      }
-
-      function showCheckout(amount) {
-        clearDonateStatus();
-        if (checkoutAmountEl) checkoutAmountEl.textContent = amount.toFixed(2);
-        if (amountForm) amountForm.style.display = 'none';
-        if (checkoutSection) checkoutSection.style.display = 'block';
-        requestAnimationFrame(function() {
-          renderPayPalButton();
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const navLinks = document.getElementById('navLinks');
+                const navToggle = document.querySelector('.nav-toggle');
+                if (navLinks.classList.contains('open')) {
+                    navLinks.classList.remove('open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                    navToggle.textContent = 'MENU';
+                }
+            });
         });
-      }
 
-      function renderPayPalButton() {
-        if (paypalRendered || !paypalContainer) return;
-        if (typeof paypal === 'undefined') {
-          var fallback = document.createElement('p');
-          fallback.className = 'donate-app-note';
-          fallback.textContent = "The PayPal button couldn't load (often an ad blocker). Try disabling it and refreshing, or use the HCB option above.";
-          paypalContainer.appendChild(fallback);
-          return;
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('section[id], header[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
         }
 
-        console.log('renderPayPalButton: container visible =', paypalContainer.offsetParent !== null, 'paypal defined =', typeof paypal !== 'undefined');
+        window.addEventListener('scroll', updateActiveNav);
 
-        try {
-          paypal.Buttons({
-            style: {
-              shape: 'rect',
-              label: 'donate',
-              fundingicons: true,
-              layout: 'horizontal',
-              tagline: false
-            },
-            createOrder: function(data, actions) {
-              var amt = checkoutAmountEl ? parseFloat(checkoutAmountEl.textContent) : parseFloat(currentAmount);
-              console.log('PayPal createOrder amount:', amt);
-              if (isNaN(amt) || amt <= 0) {
-                showDonateStatus('Invalid donation amount.', 'error');
-                throw new Error('Invalid donation amount');
-              }
-              return actions.order.create({
-                purchase_units: [{
-                  amount: {
-                    value: amt.toFixed(2),
-                    currency_code: 'USD'
-                  }
-                }]
-              });
-            },
-            onApprove: function(data, actions) {
-              return actions.order.capture().then(function(details) {
-                var name = (details.payer && details.payer.name && details.payer.name.given_name) ? details.payer.name.given_name : 'supporter';
-                showDonateStatus('Thank you, ' + name + '! Your donation went through.', 'success');
-                if (paypalContainer) paypalContainer.style.display = 'none';
-              }).catch(function() {
-                showDonateStatus('Payment could not be completed. Please try again.', 'error');
-              });
-            },
-            onCancel: function() {
-              showDonateStatus('Donation cancelled. You can try again anytime.', 'info');
-            },
-            onError: function(err) {
-              console.error('PayPal button error:', err);
-              showDonateStatus('There was a problem processing your donation. Please try again later.', 'error');
+        function animateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const targetProgress = parseInt(progressFill.getAttribute('data-progress')) || 25;
+            let current = 0;
+            const duration = 1500;
+            const startTime = performance.now();
+
+            function step(timestamp) {
+                const elapsed = timestamp - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                current = Math.floor(progress * targetProgress);
+                progressFill.style.width = current + '%';
+                progressPercent.textContent = current + '%';
+
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    progressFill.style.width = targetProgress + '%';
+                    progressPercent.textContent = targetProgress + '%';
+                }
             }
-          }).render('#paypal-button-container').then(function() {
-            console.log('PayPal button rendered successfully');
-          }).catch(function(err) {
-            console.error('PayPal render error:', err);
-            showDonateStatus('Payment button failed to load. Please try again or use HCB.', 'error');
-          });
-        } catch (e) {
-          console.error('PayPal render exception:', e);
-          showDonateStatus('Payment button failed to load. Please try again or use HCB.', 'error');
-        }
-        paypalRendered = true;
-      }
 
-      if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', function() {
-          var raw = (donateAmountInput && donateAmountInput.value.trim()) ? donateAmountInput.value.trim() : currentAmount;
-          var amt = parseFloat(raw);
-          if (isNaN(amt) || amt <= 0) {
-            if (donateAmountInput) donateAmountInput.reportValidity();
-            return;
-          }
-          showCheckout(amt);
+            requestAnimationFrame(step);
+        }
+
+        function resetProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            progressFill.style.width = '0%';
+            progressPercent.textContent = '0%';
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                animateProgress();
+            }, 500);
         });
-      }
-    })();
 
-    (function () {
-      var recycleForm = document.getElementById('recycle-form');
-      var recycleConfirm = document.getElementById('recycle-confirm');
-      if (!recycleForm) return;
+        (function () {
+            var presetButtons = document.querySelectorAll('.donate-preset');
+            var donateAmountInput = document.getElementById('donate-amount');
+            var currentAmount = '10.00';
 
-      recycleForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        if (!recycleForm.checkValidity()) {
-          recycleForm.reportValidity();
-          return;
+            function setAmount(value) {
+                currentAmount = value;
+                if (donateAmountInput) donateAmountInput.value = value;
+                presetButtons.forEach(function(btn) {
+                    var btnAmount = btn.getAttribute('data-amount');
+                    btn.setAttribute('aria-pressed', btnAmount === String(value) ? 'true' : 'false');
+                });
+            }
+
+            if (presetButtons.length) {
+                presetButtons.forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        setAmount(btn.getAttribute('data-amount'));
+                    });
+                });
+            }
+
+            if (donateAmountInput) {
+                donateAmountInput.addEventListener('input', function() {
+                    var val = donateAmountInput.value.trim();
+                    if (val) {
+                        currentAmount = val;
+                        presetButtons.forEach(function(btn) {
+                            btn.setAttribute('aria-pressed', 'false');
+                        });
+                    }
+                });
+            }
+
+            if (presetButtons.length) setAmount('10');
+
+            var checkoutBtn = document.getElementById('donate-checkout-btn');
+            var checkoutSection = document.getElementById('donate-checkout');
+            var checkoutAmountEl = document.getElementById('checkout-amount');
+            var amountForm = document.getElementById('donate-amount-form');
+            var donateStatus = document.getElementById('donate-status');
+            var paypalContainer = document.getElementById('paypal-button-container');
+            var paypalRendered = false;
+
+            function showDonateStatus(message, type) {
+                if (!donateStatus) return;
+                donateStatus.textContent = '';
+                donateStatus.className = 'donate-status show' + (type ? ' ' + type : '');
+                donateStatus.appendChild(document.createTextNode(message));
+                if (type === 'success') {
+                    var again = document.createElement('button');
+                    again.type = 'button';
+                    again.className = 'donate-again';
+                    again.textContent = 'Make another donation';
+                    again.addEventListener('click', resetDonateFlow);
+                    donateStatus.appendChild(document.createElement('br'));
+                    donateStatus.appendChild(again);
+                }
+            }
+
+            function clearDonateStatus() {
+                if (!donateStatus) return;
+                donateStatus.textContent = '';
+                donateStatus.className = 'donate-status';
+            }
+
+            function resetDonateFlow() {
+                clearDonateStatus();
+                if (paypalContainer) {
+                    paypalContainer.style.display = 'block';
+                    paypalContainer.innerHTML = '';
+                }
+                if (amountForm) amountForm.style.display = 'block';
+                if (checkoutSection) checkoutSection.style.display = 'none';
+                if (presetButtons.length) setAmount('10');
+                paypalRendered = false;
+            }
+
+            function showCheckout(amount) {
+                clearDonateStatus();
+                if (checkoutAmountEl) checkoutAmountEl.textContent = amount.toFixed(2);
+                if (amountForm) amountForm.style.display = 'none';
+                if (checkoutSection) checkoutSection.style.display = 'block';
+                requestAnimationFrame(function() {
+                    renderPayPalButton();
+                });
+            }
+
+            function renderPayPalButton() {
+                if (paypalRendered || !paypalContainer) return;
+                if (typeof paypal === 'undefined') {
+                    var fallback = document.createElement('p');
+                    fallback.className = 'donate-app-note';
+                    fallback.textContent = "The PayPal button couldn't load (often an ad blocker). Try disabling it and refreshing, or use the HCB option above.";
+                    paypalContainer.appendChild(fallback);
+                    return;
+                }
+
+                console.log('renderPayPalButton: container visible =', paypalContainer.offsetParent !== null, 'paypal defined =', typeof paypal !== 'undefined');
+
+                try {
+                    paypal.Buttons({
+                        style: {
+                            shape: 'rect',
+                            label: 'donate',
+                            fundingicons: true,
+                            layout: 'horizontal',
+                            tagline: false
+                        },
+                        createOrder: function(data, actions) {
+                            var amt = checkoutAmountEl ? parseFloat(checkoutAmountEl.textContent) : parseFloat(currentAmount);
+                            console.log('PayPal createOrder amount:', amt);
+                            if (isNaN(amt) || amt <= 0) {
+                                showDonateStatus('Invalid donation amount.', 'error');
+                                throw new Error('Invalid donation amount');
+                            }
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: {
+                                        value: amt.toFixed(2),
+                                        currency_code: 'USD'
+                                    }
+                                }]
+                            });
+                        },
+                        onApprove: function(data, actions) {
+                            return actions.order.capture().then(function(details) {
+                                var name = (details.payer && details.payer.name && details.payer.name.given_name) ? details.payer.name.given_name : 'supporter';
+                                showDonateStatus('Thank you, ' + name + '! Your donation went through.', 'success');
+                                if (paypalContainer) paypalContainer.style.display = 'none';
+                            }).catch(function() {
+                                showDonateStatus('Payment could not be completed. Please try again.', 'error');
+                            });
+                        },
+                        onCancel: function() {
+                            showDonateStatus('Donation cancelled. You can try again anytime.', 'info');
+                        },
+                        onError: function(err) {
+                            console.error('PayPal button error:', err);
+                            showDonateStatus('There was a problem processing your donation. Please try again later.', 'error');
+                        }
+                    }).render('#paypal-button-container').then(function() {
+                        console.log('PayPal button rendered successfully');
+                    }).catch(function(err) {
+                        console.error('PayPal render error:', err);
+                        showDonateStatus('Payment button failed to load. Please try again or use HCB.', 'error');
+                    });
+                } catch (e) {
+                    console.error('PayPal render exception:', e);
+                    showDonateStatus('Payment button failed to load. Please try again or use HCB.', 'error');
+                }
+                paypalRendered = true;
+            }
+
+            if (checkoutBtn) {
+                checkoutBtn.addEventListener('click', function() {
+                    var raw = (donateAmountInput && donateAmountInput.value.trim()) ? donateAmountInput.value.trim() : currentAmount;
+                    var amt = parseFloat(raw);
+                    if (isNaN(amt) || amt <= 0) {
+                        if (donateAmountInput) donateAmountInput.reportValidity();
+                        return;
+                    }
+                    showCheckout(amt);
+                });
+            }
+        })();
+
+        (function () {
+            var recycleForm = document.getElementById('recycle-form');
+            var recycleConfirm = document.getElementById('recycle-confirm');
+            if (!recycleForm) return;
+
+            recycleForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                if (!recycleForm.checkValidity()) {
+                    recycleForm.reportValidity();
+                    return;
+                }
+                if (recycleConfirm) {
+                    recycleConfirm.style.display = 'block';
+                    recycleConfirm.scrollIntoView({ behavior:'smooth', block:'nearest' });
+                }
+                recycleForm.reset();
+            });
+        })();
+    </script>
+
+    <a href="#main-content" class="back-to-top" id="backToTop" aria-label="Back to top">↑ Top</a>
+
+    <script>
+        const backToTop = document.getElementById('backToTop');
+        if (backToTop) {
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
         }
-        if (recycleConfirm) {
-          recycleConfirm.style.display = 'block';
-          recycleConfirm.scrollIntoView({ behavior:'smooth', block:'nearest' });
-        }
-        recycleForm.reset();
-      });
-    })();
-  </script>
+    </script>
 </body>
 </html>
