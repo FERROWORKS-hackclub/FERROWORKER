@@ -1,0 +1,47 @@
+{
+  "progress": 25,
+  "milestones": [
+    {
+      "title": "Sketch the idea and rough plan",
+      "done": true
+    },
+    {
+      "title": "Open the GitHub repo",
+      "done": true
+    },
+    {
+      "title": "Finish the frame design",
+      "done": true
+    },
+    {
+      "title": "Choose the electronics",
+      "done": false,
+      "current": true
+    },
+    {
+      "title": "Finish the parts list",
+      "done": false
+    },
+    {
+      "title": "Build a prototype",
+      "done": false
+    }
+  ],
+  "devlogs": [
+    {
+      "date": "Oct 2026",
+      "tone": "yellow",
+      "text": "We started sketching the frame and working out how to fit a one-metre build volume into it. There's still plenty to solve."
+    },
+    {
+      "date": "Recent",
+      "tone": "green",
+      "text": "The README draft is up and the GitHub repo is public. We're still checking prices and changing the parts list."
+    },
+    {
+      "date": "Update",
+      "tone": "cyan",
+      "text": "We have a few tool-mount sketches. Now we're working out which one will be easiest to build and change over."
+    }
+  ]
+}
