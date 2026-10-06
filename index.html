@@ -1057,7 +1057,7 @@
                     <input type="text" id="recycle-printer" placeholder="Printer make/model or short description" required>
                     <textarea id="recycle-details" placeholder="Condition, issues, included parts, and any useful details." required></textarea>
                     <button type="submit">Send request</button>
-                    <div class="recycle-confirm" id="recycle-confirm">Request received. We will reply with next steps.</div>
+                    <div class="recycle-confirm" id="recycle-confirm" role="status">Your email app will open with the request. Add photos and press Send.</div>
                 </form>
             </section>
         </main>
@@ -1366,11 +1366,27 @@
                     recycleForm.reportValidity();
                     return;
                 }
+
+                var subject = 'Printer donation request: ' + document.getElementById('recycle-printer').value.trim();
+                var body = [
+                    'Name: ' + document.getElementById('recycle-name').value.trim(),
+                    'Email: ' + document.getElementById('recycle-email').value.trim(),
+                    'Phone: ' + document.getElementById('recycle-phone').value.trim(),
+                    'Location: ' + document.getElementById('recycle-location').value,
+                    'Printer: ' + document.getElementById('recycle-printer').value.trim(),
+                    '',
+                    'Details:',
+                    document.getElementById('recycle-details').value.trim(),
+                    '',
+                    'I will attach photos of the printer before sending.'
+                ].join('\n');
+                window.location.href = 'mailto:ferroworks@outlook.com.au?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
                 if (recycleConfirm) {
+                    recycleConfirm.textContent = 'Your email app should open with the request filled in. Add photos and press Send. If it does not open, use the email address above.';
                     recycleConfirm.style.display = 'block';
                     recycleConfirm.scrollIntoView({ behavior:'smooth', block:'nearest' });
                 }
-                recycleForm.reset();
             });
         })();
     </script>
