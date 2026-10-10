@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; base-uri 'self'; object-src 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; base-uri 'self'; object-src 'none'">
     <title>Partners | FERROWORKER</title>
     <meta name="description" content="Meet the partners supporting FERROWORKER with PCB manufacturing and 3D printing.">
     <style>
@@ -161,12 +161,60 @@
             gap: 2rem;
         }
 
+        .card + .card { margin-top: 1.8rem; }
+
         .card h3 {
             font-size: 1.4rem;
             font-weight: 900;
             margin-bottom: 0.8rem;
             text-transform: uppercase;
             font-family: var(--font-sans);
+        }
+
+        .partner-form label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-weight: 700;
+        }
+
+        .partner-form input,
+        .partner-form textarea {
+            width: 100%;
+            margin-bottom: 0.8rem;
+            padding: 10px 12px;
+            border: var(--border);
+            box-shadow: 3px 3px 0px #000;
+            background: var(--bg);
+            color: var(--black);
+            font: inherit;
+        }
+
+        .partner-form textarea { min-height: 110px; resize: vertical; }
+
+        .partner-form button {
+            padding: 10px 16px;
+            border: var(--border);
+            background: var(--rust);
+            color: var(--white);
+            font: inherit;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .partner-form button:hover { background: #8c3815; transform: translate(-1px, -1px); box-shadow: 4px 4px 0px #000; }
+
+        .partner-confirm {
+            display: none;
+            margin-top: 12px;
+            padding: 10px 14px;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            background: var(--green);
+            color: #5c574d;
+            font-size: 0.92rem;
         }
 
         footer {
@@ -185,20 +233,17 @@
             padding: 1.2rem 1.5rem;
         }
 
-        footer a { color: var(--rust); text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .hero { padding: 2rem 1.25rem; }
+            .card { align-items: flex-start; flex-direction: column; gap: 1.25rem; }
+            .partner-logo { flex-basis: auto; width: min(280px, 100%); }
+        }
 
         .partner-logo {
             display: block;
             flex: 0 0 min(280px, 38%);
             width: min(280px, 38%);
             height: auto;
-        }
-
-        @media (max-width: 600px) {
-            .hero { padding: 2rem 1.25rem; }
-            .card { align-items: flex-start; flex-direction: column; gap: 1.25rem; }
-            .partner-logo { flex-basis: auto; width: min(280px, 100%); }
         }
     </style>
 </head>
@@ -207,31 +252,90 @@
         <nav aria-label="Page navigation">
             <div class="nav-badge">FERROWORKER</div>
             <div class="nav-links">
-                <a class="nav-link" href="index.html">Home</a>
-                <a class="nav-link active" href="partners.html" aria-current="page">Partners</a>
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link active" href="/partner" aria-current="page">Partners</a>
             </div>
         </nav>
 
         <main>
             <header class="hero">
                 <h1>Our Partners</h1>
-                <p>Avion supports FERROWORKER with PCB manufacturing and 3D printing.</p>
+                <p>Avion and Recrest are partners supporting FERROWORKER.</p>
             </header>
 
             <section aria-labelledby="partners-title">
                 <div class="sec-num">07</div>
                 <h2 class="section-title" id="partners-title">Project Partners</h2>
                 <article class="card" aria-labelledby="avion-title">
-                    <img class="partner-logo" src="avion.png" alt="Avion logo">
+                    <img class="partner-logo" src="/avion.png" alt="Avion logo">
                     <div>
                         <h3 id="avion-title">Avion</h3>
                         <p>Avion is our partner for printed circuit boards and 3D-printed parts, helping us turn the FERROWORKER design into physical hardware.</p>
                     </div>
                 </article>
+                <article class="card" aria-labelledby="recrest-title">
+                    <div>
+                        <h3 id="recrest-title">Recrest</h3>
+                        <p>Recrest is a partner of the FERROWORKER project.</p>
+                    </div>
+                </article>
+            </section>
+
+            <section aria-labelledby="partner-request-title">
+                <div class="sec-num">08</div>
+                <h2 class="section-title" id="partner-request-title">Become a Partner</h2>
+                <p>Interested in partnering with FERROWORKER? Send us a few details about your organization and how you would like to work together.</p>
+                <form class="partner-form" id="partner-form">
+                    <label for="partner-organization">Organization</label>
+                    <input type="text" id="partner-organization" required>
+                    <label for="partner-contact">Your name</label>
+                    <input type="text" id="partner-contact" required>
+                    <label for="partner-email">Email address</label>
+                    <input type="email" id="partner-email" required>
+                    <label for="partner-phone">Phone number (optional)</label>
+                    <input type="tel" id="partner-phone">
+                    <label for="partner-interest">How would you like to partner?</label>
+                    <textarea id="partner-interest" required></textarea>
+                    <button type="submit">Request to be a partner</button>
+                    <div class="partner-confirm" id="partner-confirm" role="status" aria-live="polite">Your email app should open with the request filled in. Review it and press Send. If it does not open, email ferroworks@outlook.com.au.</div>
+                </form>
             </section>
         </main>
 
         <footer>FERROWORKER · GPL-3.0 License · made by Riley Wood &amp; sami</footer>
     </div>
+    <script>
+        (function () {
+            var partnerForm = document.getElementById('partner-form');
+            var partnerConfirm = document.getElementById('partner-confirm');
+            if (!partnerForm) return;
+
+            partnerForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                if (!partnerForm.checkValidity()) {
+                    partnerForm.reportValidity();
+                    return;
+                }
+
+                var organization = document.getElementById('partner-organization').value.trim();
+                var subject = 'Partnership request: ' + organization;
+                var body = [
+                    'Organization: ' + organization,
+                    'Name: ' + document.getElementById('partner-contact').value.trim(),
+                    'Email: ' + document.getElementById('partner-email').value.trim(),
+                    'Phone: ' + document.getElementById('partner-phone').value.trim(),
+                    '',
+                    'How they would like to partner:',
+                    document.getElementById('partner-interest').value.trim()
+                ].join('\n');
+                window.location.href = 'mailto:ferroworks@outlook.com.au?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+                if (partnerConfirm) {
+                    partnerConfirm.style.display = 'block';
+                    partnerConfirm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
