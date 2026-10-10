@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; base-uri 'self'; object-src 'none'">
+    <title>Partners | FERROWORKER</title>
+    <meta name="description" content="Meet the partners helping make FERROWORKER possible.">
+    <style>
+        :root {
+            --bg: #fffdf5;
+            --black: #000;
+            --white: #fff;
+            --rust: #b5451b;
+            --yellow: #ffd166;
+            --cyan: #118ab2;
+            --font-mono: "IBM Plex Mono", "Courier New", Courier, monospace;
+            --border: 3px solid var(--black);
+            --shadow: 5px 5px 0 var(--black);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 1.5rem 1rem;
+            display: flex;
+            justify-content: center;
+            background: var(--bg);
+            background-image: radial-gradient(#d3cebf 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            color: var(--black);
+            font-family: var(--font-mono);
+            line-height: 1.5;
+        }
+
+        a { color: var(--rust); }
+        a:hover { text-decoration: none; }
+
+        .wrapper { width: 100%; max-width: 900px; }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .nav-badge {
+            padding: 0.4rem 0.8rem;
+            border: var(--border);
+            background: var(--rust);
+            box-shadow: var(--shadow);
+            color: var(--white);
+            font-weight: 900;
+            text-decoration: none;
+        }
+
+        .back-link { font-weight: 700; }
+
+        .page-intro {
+            max-width: 680px;
+            margin-bottom: 2rem;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            padding: 0.2rem 0.55rem;
+            border: 2px solid var(--black);
+            background: var(--yellow);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0 0 0.75rem;
+            font-size: 2.6rem;
+            line-height: 1.1;
+        }
+
+        .page-intro p { max-width: 62ch; margin: 0; }
+
+        .partner {
+            display: grid;
+            grid-template-columns: minmax(180px, 0.8fr) 1.5fr;
+            align-items: center;
+            gap: 2rem;
+            padding: clamp(1.25rem, 4vw, 2.5rem);
+            border: var(--border);
+            background: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .logo-wrap {
+            min-height: 150px;
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+            border: 2px solid var(--black);
+            background: #f4f8fb;
+        }
+
+        .partner img { display: block; width: 100%; max-width: 280px; height: auto; }
+
+        .partner h2 { margin: 0 0 0.75rem; font-size: 1.75rem; }
+        .partner p { margin: 0 0 1rem; }
+
+        .services {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            list-style: none;
+            margin: 1rem 0 0;
+            padding: 0;
+        }
+
+        .services li {
+            padding: 0.35rem 0.65rem;
+            border: 2px solid var(--black);
+            background: #d9f3f7;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: var(--border);
+            color: #5c574d;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 600px) {
+            nav { margin-bottom: 2rem; }
+            h1 { font-size: 2rem; }
+            .partner { grid-template-columns: 1fr; gap: 1.25rem; }
+            .logo-wrap { min-height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <nav aria-label="Page navigation">
+            <a class="nav-badge" href="index.html">FERROWORKER</a>
+            <a class="back-link" href="index.html">Back to project</a>
+        </nav>
+
+        <main>
+            <header class="page-intro">
+                <span class="eyebrow">Built together</span>
+                <h1>Our partners</h1>
+                <p>Good hardware takes a team. Avion is supporting FERROWORKER with PCB manufacturing and 3D printing.</p>
+            </header>
+
+            <section class="partner" aria-labelledby="avion-title">
+                <div class="logo-wrap">
+                    <img src="avion.png" alt="Avion logo">
+                </div>
+                <div>
+                    <h2 id="avion-title">Avion</h2>
+                    <p>Avion is our partner for printed circuit boards and 3D-printed parts, helping us turn the FERROWORKER design into physical hardware.</p>
+                    <ul class="services" aria-label="Avion partner support">
+                        <li>PCB manufacturing</li>
+                        <li>3D printing</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer>FERROWORKER · GPL-3.0 License · made by Riley Wood &amp; sami</footer>
+    </div>
+</body>
+</html>
