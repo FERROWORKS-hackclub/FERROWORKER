@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.paypal.com https://*.paypalobjects.com; style-src 'self' 'unsafe-inline' https://*.paypal.com https://*.paypalobjects.com; img-src 'self' data: https://*.paypal.com https://*.paypalobjects.com; font-src 'self' data: https://*.paypalobjects.com; connect-src 'self' https://*.paypal.com https://*.paypalobjects.com; frame-src https://*.paypal.com https://*.paypalobjects.com; form-action 'self' https://*.paypal.com; object-src 'none'; base-uri 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.paypal.com https://*.paypalobjects.com; style-src 'self' 'unsafe-inline' https://*.paypal.com https://*.paypalobjects.com; img-src 'self' data: https://*.paypal.com https://*.paypalobjects.com; font-src 'self' data: https://*.paypalobjects.com; connect-src 'self' https://*.paypal.com https://*.paypalobjects.com; frame-src 'self' https://*.paypal.com https://*.paypalobjects.com; form-action 'self' https://*.paypal.com; object-src 'none'; base-uri 'self'">
     <title>FERROWORKER</title>
     <meta name="description" content="FERROWORKER is a 1m x 1m x 1m build size 3D printer and tool changer.">
 
@@ -235,6 +235,22 @@
 
         section {
             margin-bottom: 3.5rem;
+        }
+
+        .printer-embed {
+            width: 100%;
+            height: min(68vh, 640px);
+            min-height: 400px;
+            display: block;
+            border: var(--border);
+            box-shadow: var(--shadow-lg);
+            background: #11171a;
+        }
+
+        .printer-note {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
         }
 
         .grid-3 {
@@ -723,6 +739,11 @@
         }
 
         @media (max-width: 640px) {
+            .printer-embed {
+                height: 480px;
+                min-height: 0;
+            }
+
             .nav-links {
                 display: none;
                 flex-direction: column;
@@ -905,6 +926,7 @@
             <button class="nav-toggle" aria-expanded="false" aria-controls="navLinks" onclick="toggleNav()" aria-label="Toggle navigation menu">MENU</button>
             <div class="nav-links" id="navLinks">
                 <a href="#about" class="nav-link">About</a>
+                <a href="#printer" class="nav-link">Printer</a>
                 <a href="#features" class="nav-link">Features</a>
                 <a href="#bom" class="nav-link">BOM</a>
                 <a href="#progress" class="nav-link">Build log</a>
@@ -921,14 +943,22 @@
         </header>
 
         <main>
-            <section id="about" aria-labelledby="about-title">
+            <section id="printer" aria-labelledby="printer-title">
                 <div class="sec-num">01</div>
+                <h2 class="section-title" id="printer-title">The printer</h2>
+                <p>Explore the printer concept. The planned build volume is 1 × 1 × 1 metre, with a tool changer planned for printing, laser cutting, and CNC drilling.</p>
+                <iframe class="printer-embed" src="ferroworker-simulator.html" title="Interactive 3D concept of the FERROWORKER printer" loading="lazy"></iframe>
+                <p class="printer-note">Concept visualization, not finished CAD. The frame, electronics, and parts list are still being developed.</p>
+            </section>
+
+            <section id="about" aria-labelledby="about-title">
+                <div class="sec-num">02</div>
                 <h2 class="section-title" id="about-title">What we're building</h2>
                 <p>We're figuring out the frame, checking part prices, and writing down the build steps as we go. The plans and guide will be open source.</p>
             </section>
 
             <section id="features" aria-labelledby="features-title">
-                <div class="sec-num">02</div>
+                <div class="sec-num">03</div>
                 <h2 class="section-title" id="features-title">Tool Changer</h2>
                 <p>The idea is one machine with three tools:</p>
                 <ul class="plain">
@@ -939,7 +969,7 @@
             </section>
 
             <section id="bom" aria-labelledby="bom-title">
-                <div class="sec-num">03</div>
+                <div class="sec-num">04</div>
                 <h2 class="section-title" id="bom-title">Cost & BOM</h2>
                 <div class="cost"><sup>USD</sup>&lt; 900</div>
                 <p>We're trying to keep the parts under $900 USD. That's a target, not a final total.</p>
@@ -949,7 +979,7 @@
             </section>
 
             <section id="progress" aria-labelledby="progress-title">
-                <div class="sec-num">04</div>
+                <div class="sec-num">05</div>
                 <h2 class="section-title" id="progress-title">Build log</h2>
 
                 <div class="progress-bar-wrap">
@@ -999,7 +1029,7 @@
             </section>
 
             <section id="donate" aria-labelledby="donate-title">
-                <div class="sec-num">05</div>
+                <div class="sec-num">06</div>
                 <h2 class="section-title" id="donate-title">Help pay for parts</h2>
                 <p>This machine needs a lot of parts. Donations help us buy them; the plans and guide will stay free.</p>
                 <a class="donate-cta" href="https://hcb.hackclub.com/donations/start/ferroworks" target="_blank" rel="noopener">Donate in the HCB app</a>
@@ -1031,7 +1061,7 @@
             </section>
 
             <section id="recycle" aria-labelledby="recycle-title">
-                <div class="sec-num">06</div>
+                <div class="sec-num">07</div>
                 <h2 class="section-title" id="recycle-title">Got an old printer?</h2>
                 <p>If you're done with a printer, we'd like to reuse its working parts in a FERROWORKER build. Broken or incomplete machines are welcome too.</p>
                 <ul class="plain">
