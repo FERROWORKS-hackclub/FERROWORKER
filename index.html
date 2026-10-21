@@ -1440,6 +1440,109 @@
             });
         })();
     </script>
+    <script type="application/ld+json">
+            {
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "SoftwareSourceCode",
+                  "@id": "https://ferroworks.org/#project",
+                  "name": "FERROWORKER",
+                  "description": "An open-source, 1-metre-cube multi-tool 3D printer, laser cutter, and CNC drill designed to be built in five days for under $900 USD.",
+                  "codeRepository": "https://github.com/Sami9889/ferroworker",
+                  "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+                  "programmingLanguage": "C++",
+                  "runtimePlatform": "Marlin / Klipper Firmware",
+                  "author": [
+                    {
+                      "@type": "Person",
+                      "name": "Samrath Singh",
+                      "alternateName": "sami",
+                      "url": "https://sami-s.dev"
+                    },
+                    {
+                      "@type": "Person",
+                      "name": "Riley Wood"
+                    }
+                  ],
+                  "producer": {
+                    "@type": "Organization",
+                    "@id": "https://ferroworks.org/#organization"
+                  }
+                },
+                {
+                  "@type": "Organization",
+                  "@id": "https://ferroworks.org/#organization",
+                  "name": "Ferroworks",
+                  "url": "https://ferroworks.org",
+                  "logo": "https://ferroworks.org/logo.png",
+                  "email": "admin@ferroworks.org",
+                  "sameAs": [
+                    "https://ferroworks.sami-s.dev",
+                    "https://github.com/Sami9889"
+                  ],
+                  "location": {
+                    "@type": "Place",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressLocality": "Brisbane",
+                      "addressRegion": "QLD",
+                      "addressCountry": "AU"
+                    }
+                  },
+                  "parentOrganization": {
+                    "@type": "Organization",
+                    "name": "Hack Club",
+                    "url": "https://hackclub.com"
+                  }
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://ferroworks.org/#website",
+                  "url": "https://ferroworks.org",
+                  "name": "FERROWORKER - Open Source 1m³ Multi-Tool Fabricator",
+                  "description": "Build your own 1-metre-cube 3D printer, laser cutter, and CNC drill.",
+                  "publisher": {
+                    "@type": "Organization",
+                    "@id": "https://ferroworks.org/#organization"
+                  },
+                  "inLanguage": "en-AU"
+                },
+                {
+                  "@type": "DonateAction",
+                  "@id": "https://ferroworks.org/#donate",
+                  "name": "Donate to FERROWORKER Development",
+                  "description": "Help pay for parts and prototype builds via Hack Club Bank.",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://hcb.hackclub.com/donations/make/ferroworks",
+                    "actionPlatform": [
+                      "http://schema.org/DesktopWebPlatform",
+                      "http://schema.org/MobileWebPlatform"
+                    ]
+                  },
+                  "recipient": {
+                    "@type": "Organization",
+                    "@id": "https://ferroworks.org/#organization"
+                  }
+                },
+                {
+                  "@type": "RecyclingCenter",
+                  "@id": "https://ferroworks.org/#hardware-recycle",
+                  "name": "FERROWORKER Hardware Recycling & Parts Drive",
+                  "description": "Donate old or broken 3D printers, steppers, extruders, linear rods, and electronics to help build open-source machines.",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Brisbane",
+                    "addressRegion": "QLD",
+                    "addressCountry": "AU"
+                  },
+                  "areaServed": "AU",
+                  "email": "admin@ferroworks.org"
+                }
+              ]
+            }
+            </script>
 
     <a href="#main-content" class="back-to-top" id="backToTop" aria-label="Back to top">↑ Top</a>
 
