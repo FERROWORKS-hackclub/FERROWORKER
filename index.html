@@ -1142,7 +1142,6 @@
                             <span aria-hidden="true">&#128274;</span>
                             <span>Secured by PayPal</span>
                         </div>
-                        <p class="paypal-card-note">Apple Pay is not active here yet. PayPal requires merchant approval, domain verification and backend setup before it can work; availability also depends on the device and browser.</p>
                     </div>
                 </div>
             </section>
@@ -1503,7 +1502,7 @@
                 if (typeof paypal === 'undefined') {
                     var fallback = document.createElement('p');
                     fallback.className = 'donate-app-note';
-                    fallback.textContent = "The PayPal button couldn't load (often an ad blocker). Try disabling it and refreshing, or use the HCB option above.";
+                    fallback.textContent = "PayPal checkout did not load. Check that the PayPal client ID is configured, then refresh or use the HCB option above.";
                     paypalContainer.appendChild(fallback);
                     return;
                 }
