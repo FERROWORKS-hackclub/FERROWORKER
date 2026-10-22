@@ -1642,72 +1642,54 @@
         })();
     </script>
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "Organization",
-          "@id": "https://ferroworks.org/#organization",
-          "name": "Ferroworks",
-          "url": "https://ferroworks.org/",
-          "email": "admin@ferroworks.org",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Brisbane",
-            "addressRegion": "QLD",
-            "addressCountry": "AU"
-          },
-          "parentOrganization": {
-            "@type": "Organization",
-            "name": "Hack Club",
-            "url": "https://hackclub.com/"
-          }
-        },
-        {
-          "@type": "WebSite",
-          "@id": "https://ferroworks.org/#website",
-          "url": "https://ferroworks.org/",
-          "name": "FERROWORKER",
-          "description": "The FERROWORKER large-format 3D printer project: a 1-cubic-metre build concept with a planned multi-tool changer.",
-          "inLanguage": "en-AU",
-          "publisher": {
-            "@id": "https://ferroworks.org/#organization"
-          }
-        },
-        {
-          "@type": "Product",
-          "@id": "https://ferroworks.org/#product",
-          "name": "FERROWORKER",
-          "description": "A large-format 3D printer in development, planned around a 1 × 1 × 1 metre build volume and a tool changer for 3D printing, laser cutting and CNC drilling.",
-          "category": "Large-format 3D printer",
-          "brand": {
-            "@type": "Brand",
-            "name": "FERROWORKER"
-          },
-          "manufacturer": {
-            "@id": "https://ferroworks.org/#organization"
-          },
-          "mainEntityOfPage": {
-            "@id": "https://ferroworks.org/#website"
-          }
-        },
-        {
-          "@type": "DonateAction",
-          "@id": "https://ferroworks.org/#donate",
-          "name": "Donate to FERROWORKER development",
-          "description": "Help fund parts and prototype builds.",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://hcb.hackclub.com/donations/start/ferroworks"
-          },
-          "recipient": {
-            "@id": "https://ferroworks.org/#organization"
-          }
-        }
-      ]
+      "@type": "Organization",
+      "@id": "https://ferroworks.org/#organization",
+      "name": "Ferroworks",
+      "url": "https://ferroworks.org/",
+      "email": "admin@ferroworks.org",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Brisbane",
+        "addressRegion": "QLD",
+        "addressCountry": "AU"
+      },
+      "parentOrganization": {
+        "@type": "Organization",
+        "name": "Hack Club",
+        "url": "https://hackclub.com/"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://ferroworks.org/#website",
+      "url": "https://ferroworks.org/",
+      "name": "FERROWORKER",
+      "description": "The FERROWORKER large-format 3D printer project: a 1-cubic-metre build concept with a planned multi-tool changer.",
+      "inLanguage": "en-AU",
+      "publisher": {
+        "@id": "https://ferroworks.org/#organization"
+      }
+    },
+    {
+      "@type": "DonateAction",
+      "@id": "https://ferroworks.org/#donate",
+      "name": "Donate to FERROWORKER development",
+      "description": "Help fund parts and prototype builds.",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://hcb.hackclub.com/donations/start/ferroworks"
+      },
+      "recipient": {
+        "@id": "https://ferroworks.org/#organization"
+      }
     }
-    </script>
-
+  ]
+}
+</script>
     <a href="#main-content" class="back-to-top" id="backToTop" aria-label="Back to top">↑ Top</a>
 
     <script>
