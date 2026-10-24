@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+  window.showErrorPage = function (status) {
+    const code = Number(status);
+    if (!Number.isInteger(code) || code < 400 || code > 599) return;
+
+    const page = new URL("/err.html", window.location.origin);
+    page.searchParams.set("code", code);
+    window.location.assign(page.href);
+  };
+</script>
     <meta name="google-site-verification" content="GxWAddk7lzCshT8sPs4bIIOv7q3ZN-eeXZUAHcNBeZw" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
