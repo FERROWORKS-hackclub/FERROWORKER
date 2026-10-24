@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#fffdf5">
+  <title>Error · FERROWORKER</title>
+  <style>
+    :root {
+      --bg: #fffdf5;
+      --black: #000;
+      --white: #fff;
+      --rust: #b5451b;
+      --yellow: #ffd166;
+      --cyan: #118ab2;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "IBM Plex Mono", "Courier New", Courier, monospace;
+      --shadow: 5px 5px 0 #000;
+      --shadow-lg: 8px 8px 0 #000;
+      --border: 3px solid #000;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      padding: 1.5rem 1rem;
+      display: flex;
+      justify-content: center;
+      background: var(--bg);
+      background-image: radial-gradient(#d3cebf 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      color: var(--black);
+      font: 16px/1.5 var(--font-mono);
+    }
+    a { color: var(--rust); }
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid var(--cyan);
+      outline-offset: 3px;
+    }
+    .wrapper { width: 100%; max-width: 900px; }
+    .skip-link {
+      position: absolute;
+      top: -50px;
+      left: 1rem;
+      z-index: 2;
+      padding: .5rem 1rem;
+      border: var(--border);
+      background: var(--yellow);
+      color: var(--black);
+      font-weight: 700;
+    }
+    .skip-link:focus { top: 1rem; }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: .75rem;
+      margin-bottom: 2.5rem;
+    }
+    .nav-badge {
+      padding: .4rem .8rem;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      background: var(--rust);
+      color: var(--white);
+      font-weight: 900;
+      font-size: .9rem;
+      letter-spacing: .5px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      flex: 0 0 100%;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+    .nav-link {
+      padding: .3rem .6rem;
+      border: var(--border);
+      box-shadow: 3px 3px 0 #000;
+      background: var(--white);
+      color: var(--black);
+      font-size: .85rem;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-link:hover { background: var(--yellow); }
+    .hero {
+      position: relative;
+      padding: 2.5rem 2rem;
+      margin-bottom: 3rem;
+      border: var(--border);
+      border-top: 6px solid var(--rust);
+      box-shadow: var(--shadow-lg);
+      background: var(--white);
+    }
+    .sec-num {
+      margin-bottom: 6px;
+      color: var(--rust);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .status-row .sec-num { margin: 0; }
+    .status-code {
+      flex: 0 0 auto;
+      padding: .4rem .75rem;
+      border: var(--border);
+      box-shadow: 3px 3px 0 #000;
+      background: var(--yellow);
+      font: 900 1.1rem var(--font-mono);
+    }
+    h1 {
+      margin-bottom: 1.2rem;
+      font: 900 clamp(2.5rem, 7vw, 4.2rem)/1.05 var(--font-sans);
+      text-transform: uppercase;
+    }
+    .message {
+      max-width: 720px;
+      margin-bottom: 2rem;
+      font-size: clamp(1.1rem, 3vw, 1.35rem);
+      font-weight: 600;
+    }
+    .request-path {
+      margin-top: 1.25rem;
+      color: #5c574d;
+      font-size: .8rem;
+      overflow-wrap: anywhere;
+    }
+    .request-path code {
+      color: var(--black);
+      font: 700 .8rem var(--font-mono);
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .btn-cta {
+      display: inline-block;
+      padding: .9rem 1.8rem;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      background: var(--rust);
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 900;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: transform .1s ease, box-shadow .1s ease;
+    }
+    button.btn-cta { cursor: pointer; font-family: var(--font-mono); }
+    .btn-cta.secondary { background: var(--white); color: var(--black); }
+    .btn-cta:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: var(--shadow-lg);
+      background: #8c3815;
+    }
+    footer {
+      padding: 1.2rem 1.5rem;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      background: var(--white);
+      color: #5c574d;
+      font-size: .78rem;
+    }
+    footer a { color: var(--rust); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      .nav-links { flex-direction: column; }
+      .nav-link { width: 100%; text-align: center; }
+      .hero { padding: 2rem 1.25rem; }
+      .status-row { align-items: flex-start; }
+      footer { padding: 1rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="wrapper">
+    <nav aria-label="Main navigation">
+      <a class="nav-badge" href="/">FERROWORKER</a>
+      <div class="nav-links">
+        <a class="nav-link" href="/#about">About</a>
+        <a class="nav-link" href="/#printer">Printer</a>
+        <a class="nav-link" href="/#features">Features</a>
+        <a class="nav-link" href="/#bom">BOM</a>
+        <a class="nav-link" href="/#team">Meet the team</a>
+        <a class="nav-link" href="/#progress">Build log</a>
+        <a class="nav-link" href="/#donate">Donate</a>
+        <a class="nav-link" href="/partner">Partners</a>
+        <a class="nav-link" href="/#recycle">Recycle</a>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <header class="hero" aria-labelledby="error-title">
+        <div class="status-row">
+          <div class="sec-num" id="error-type">CLIENT ERROR</div>
+          <div class="status-code" id="error-code" aria-label="HTTP status code">404</div>
+        </div>
+        <h1 id="error-title">Page not found</h1>
+        <p class="message" id="error-message" aria-live="polite">
+          We couldn’t find the page you were looking for. It may have moved, or the address may be wrong.
+        </p>
+        <div class="actions">
+          <a class="btn-cta" href="/">Back to homepage</a>
+          <button class="btn-cta secondary" id="retry" type="button" hidden>Try again</button>
+        </div>
+        <p class="request-path" id="request-path" hidden>Requested path: <code></code></p>
+      </header>
+    </main>
+
+    <footer>
+      FERROWORKER · Open source, with some design code and other materials excluded ·
+      <a href="mailto:admin@ferroworks.org">Contact us</a>
+    </footer>
+  </div>
+
+  <script>
+    // Pass the actual HTTP status in the URL, for example /err.html?code=500.
+    const statusNames = {
+      400: "Bad Request",
+      401: "Unauthorized",
+      402: "Payment Required",
+      403: "Forbidden",
+      404: "Not Found",
+      405: "Method Not Allowed",
+      406: "Not Acceptable",
+      407: "Proxy Authentication Required",
+      408: "Request Timeout",
+      409: "Conflict",
+      410: "Gone",
+      411: "Length Required",
+      412: "Precondition Failed",
+      413: "Content Too Large",
+      414: "URI Too Long",
+      415: "Unsupported Media Type",
+      416: "Range Not Satisfiable",
+      417: "Expectation Failed",
+      418: "I'm a teapot",
+      421: "Misdirected Request",
+      422: "Unprocessable Content",
+      423: "Locked",
+      424: "Failed Dependency",
+      425: "Too Early",
+      426: "Upgrade Required",
+      428: "Precondition Required",
+      429: "Too Many Requests",
+      431: "Request Header Fields Too Large",
+      451: "Unavailable For Legal Reasons",
+      500: "Internal Server Error",
+      501: "Not Implemented",
+      502: "Bad Gateway",
+      503: "Service Unavailable",
+      504: "Gateway Timeout",
+      505: "HTTP Version Not Supported",
+      506: "Variant Also Negotiates",
+      507: "Insufficient Storage",
+      508: "Loop Detected",
+      510: "Not Extended",
+      511: "Network Authentication Required",
+      499: "Client Closed Request",
+      509: "Bandwidth Limit Exceeded",
+      520: "Unknown Error",
+      521: "Web Server Is Down",
+      522: "Connection Timed Out",
+      523: "Origin Is Unreachable",
+      524: "A Timeout Occurred",
+      525: "SSL Handshake Failed",
+      526: "Invalid SSL Certificate",
+      527: "Railgun Error",
+      598: "Network Read Timeout",
+      599: "Network Connect Timeout"
+    };
+    const statusMessages = {
+      400: "The server couldn’t understand the request. Check the address or the information sent, then try again.",
+      401: "This request needs valid sign-in details. Sign in with an account that has access, then try again.",
+      402: "This request requires a payment step before it can continue.",
+      403: "The server understood the request, but access to this page is not allowed.",
+      404: "We couldn’t find the page you were looking for. It may have moved, or the address may be wrong.",
+      405: "This address doesn’t support the request method used.",
+      406: "The server can’t provide this page in a format your browser accepts.",
+      407: "The network proxy requires authentication before this request can continue.",
+      408: "The server timed out waiting for the request. Check your connection and try again.",
+      409: "The request conflicts with the current state of this resource.",
+      410: "This page has been removed and is not expected to return.",
+      411: "The server requires a content-length value for this request.",
+      412: "A condition in the request did not match the current state of the resource.",
+      413: "The request is too large for the server to process. Try a smaller file or request.",
+      414: "The address is too long for the server to process.",
+      415: "The server doesn’t support the format used in this request.",
+      416: "The requested part of this file isn’t available. Try loading the file again.",
+      417: "The server couldn’t meet an expectation in the request.",
+      418: "This playful status means the server refuses to brew coffee because it is a teapot.",
+      421: "The request reached a server that can’t respond for this address.",
+      422: "The request was understood, but its content could not be processed.",
+      423: "This resource is locked and can’t be accessed right now.",
+      424: "This request depends on another request that failed.",
+      425: "The server declined to process this request yet. Please try again shortly.",
+      426: "The server requires a different protocol to complete this request.",
+      428: "The server requires a conditional request to prevent conflicting updates.",
+      429: "Too many requests were sent in a short time. Wait a little before trying again.",
+      431: "The request headers are too large for the server to process.",
+      451: "Access to this page is unavailable for legal reasons.",
+      499: "The connection was closed before the server finished responding.",
+      500: "The server hit an unexpected condition. Try again in a moment.",
+      501: "The server doesn’t support the functionality needed for this request.",
+      502: "A server acting as a gateway received an invalid response upstream.",
+      503: "The server is temporarily unavailable, often because of maintenance or high load.",
+      504: "A gateway didn’t receive a response from an upstream server in time.",
+      505: "The server doesn’t support the HTTP version used in this request.",
+      506: "A server configuration error prevented the requested content from being selected.",
+      507: "The server doesn’t have enough storage to complete this request.",
+      508: "The server stopped processing after detecting a loop.",
+      509: "The server or service has exceeded a bandwidth limit.",
+      510: "The server requires additional request extensions to complete this request.",
+      511: "Sign in to the network, such as its Wi-Fi portal, before loading this site.",
+      520: "The server returned an unexpected response.",
+      521: "The website’s origin server refused the connection.",
+      522: "The connection to the origin server timed out.",
+      523: "The origin server could not be reached.",
+      524: "The connection succeeded, but the origin server took too long to respond.",
+      525: "The connection failed during the SSL handshake.",
+      526: "The origin server’s SSL certificate could not be verified.",
+      527: "A connection between the proxy service and origin server failed.",
+      598: "A network read timed out before a response arrived.",
+      599: "A network connection timed out before a response arrived."
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const rawCode = params.get("code") || document.body.dataset.statusCode || "404";
+    const parsedCode = Number(rawCode);
+    const code = Number.isInteger(parsedCode) && parsedCode >= 400 && parsedCode <= 599
+      ? parsedCode
+      : 404;
+    const name = statusNames[code] || (code < 500 ? "Client Error" : "Server Error");
+    const message = statusMessages[code] || (code < 500
+      ? "The server couldn’t accept this request. Check the address or return to the homepage."
+      : "The server couldn’t complete this request. Try again in a moment, or return to the homepage.");
+
+    document.getElementById("error-code").textContent = code;
+    document.getElementById("error-type").textContent = code < 500 ? "CLIENT ERROR" : "SERVER ERROR";
+    document.getElementById("error-title").textContent = name;
+    document.getElementById("error-message").textContent = message;
+    document.getElementById("retry").hidden = code < 500;
+    document.getElementById("retry").addEventListener("click", () => window.location.reload());
+    const requestPath = document.getElementById("request-path");
+    if (window.location.pathname !== "/err.html") {
+      requestPath.querySelector("code").textContent = window.location.pathname;
+      requestPath.hidden = false;
+    }
+    document.title = `${code} ${name} · FERROWORKER`;
+  </script>
+</body>
+</html>
