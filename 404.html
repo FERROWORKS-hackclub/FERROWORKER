@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#fffdf5">
+  <title>Page not found · FERROWORKER</title>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var requestedCode = Number(params.get("code"));
+      var code = Number.isInteger(requestedCode) && requestedCode >= 400 && requestedCode <= 599
+        ? requestedCode
+        : 404;
+      var requestedPath = params.get("path") ||
+        (window.location.pathname !== "/404.html" ? window.location.pathname : "");
+      var destination = new URL("/err.html", window.location.origin);
+      destination.searchParams.set("code", String(code));
+      if (requestedPath) destination.searchParams.set("path", requestedPath);
+      window.location.replace(destination.href);
+    })();
+  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=/err.html?code=404">
+  </noscript>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem;
+      display: grid;
+      place-items: center;
+      background: #fffdf5;
+      color: #000;
+      font: 16px/1.5 "Courier New", monospace;
+      text-align: center;
+    }
+    a { color: #b5451b; }
+  </style>
+</head>
+<body>
+  <p>Taking you to the FERROWORKER error page…<br>
+    <a href="/err.html?code=404">Continue to the error page</a>
+  </p>
+</body>
+</html>
