@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>
+  <script>
   window.showErrorPage = function (status) {
     const code = Number(status);
     if (!Number.isInteger(code) || code < 400 || code > 599) return;
 
-    const page = new URL("/err.html", window.location.origin);
+    const page = new URL("/404.html", window.location.origin);
     page.searchParams.set("code", code);
     window.location.assign(page.href);
   };
