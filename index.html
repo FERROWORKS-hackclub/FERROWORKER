@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="canonical" href="https://ferroworks.org/">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.paypal.com https://*.paypalobjects.com; style-src 'self' 'unsafe-inline' https://*.paypal.com https://*.paypalobjects.com; img-src 'self' data: https://*.paypal.com https://*.paypalobjects.com; font-src 'self' data: https://*.paypalobjects.com; connect-src 'self' https://*.paypal.com https://*.paypalobjects.com; frame-src 'self' https://*.paypal.com https://*.paypalobjects.com; form-action 'self' https://*.paypal.com; object-src 'none'; base-uri 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; frame-src 'self'; form-action 'self'; object-src 'none'; base-uri 'self'">
     <title>FERROWORKER: Large-Format 3D Printer &amp; Tool Changer</title>
     <meta name="description" content="Explore FERROWORKER, a 1 m³ large-format 3D printer project with a planned tool changer for laser cutting and CNC drilling. See the concept, BOM and build log.">
     <meta property="og:type" content="website">
@@ -565,128 +565,6 @@
             margin: 1rem 0 0;
         }
 
-        .paypal-payment-options {
-            display: grid;
-            gap: 0.75rem;
-            width: 100%;
-            max-width: 420px;
-            margin-top: 1rem;
-        }
-
-        #paypal-button-container,
-        #paypal-card-button-container {
-            width: 100%;
-            min-width: 0;
-        }
-
-        .paypal-card-note {
-            margin-top: 0.75rem;
-            color: #5c574d;
-            font-size: 0.82rem;
-        }
-
-        .donate-amount-form { margin-top: 18px; }
-
-        .donate-label {
-            display: block;
-            margin-bottom: 10px;
-            color: #5c574d;
-            font-size: 0.85rem;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-        }
-
-        .donate-presets {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .donate-preset {
-            padding: 8px 12px;
-            border: var(--border);
-            background: var(--white);
-            color: var(--black);
-            font-family: inherit;
-            font-size: 0.9rem;
-            cursor: pointer;
-            box-shadow: 2px 2px 0px #000;
-        }
-
-        .donate-preset:hover,
-        .donate-preset[aria-pressed="true"] {
-            background: var(--yellow);
-            transform: translate(-1px, -1px);
-            box-shadow: 3px 3px 0px #000;
-        }
-
-        .donate-amount-input {
-            font-family: inherit;
-            font-size: 1rem;
-            padding: 10px 12px;
-            border: var(--border);
-            background: var(--bg);
-            color: var(--black);
-            outline: none;
-            width: 100%;
-            max-width: 220px;
-            box-shadow: 3px 3px 0px #000;
-        }
-
-        .donate-checkout-btn {
-            margin-top: 12px;
-            padding: 12px 18px;
-            border: var(--border);
-            background: var(--rust);
-            color: var(--white);
-            font-family: inherit;
-            font-size: 0.9rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-        }
-
-        .donate-checkout-btn:hover { background: #8c3815; transform: translate(-1px, -1px); box-shadow: 4px 4px 0px #000; }
-
-        .checkout-summary {
-            padding: 18px;
-            border: var(--border);
-            box-shadow: var(--shadow);
-            margin-bottom: 18px;
-            background: var(--white);
-        }
-
-        .donate-status {
-            margin-top: 14px;
-            padding: 12px 14px;
-            border: var(--border);
-            box-shadow: var(--shadow);
-            color: #5c574d;
-            font-size: 0.9rem;
-            display: none;
-            background: var(--white);
-        }
-
-        .donate-status.show { display: block; }
-        .donate-status.error { border-color: var(--rust); color: var(--rust); }
-
-        .secure-pay-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 12px;
-            padding: 8px 12px;
-            border: var(--border);
-            box-shadow: 2px 2px 0px #000;
-            background: var(--white);
-            color: #5c574d;
-            font-size: 0.8rem;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-        }
-
         .recycle-form input,
         .recycle-form textarea,
         .recycle-form select {
@@ -1025,7 +903,6 @@
             <h1>Big ideas.<br>One machine.</h1>
             <p>Meet FERROWORKER. A one-metre-cube printer concept with a tool changer for printing, laser cutting and CNC drilling. Ambitious by design. Built by a young team.</p>
             <a href="#printer" class="btn-cta">Explore the machine <span aria-hidden="true">↗</span></a>
-            <a href="https://hackclub.slack.com/archives/C0C0V63AW4R" class="btn-cta secondary" target="_blank" rel="noopener noreferrer" aria-label="Join Slack Channel (opens in new tab)">Join Slack</a>
             <a href="https://github.com/FERROWORKS-hackclub/FERROWORKER" class="btn-cta" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub (opens in new tab)" style="margin-left: 1rem; background-color: var(--cyan);">GitHub</a>
         <div class="hero-specs"><div><strong>1 m³</strong><span>Planned build volume</span></div><div><strong>3 tools</strong><span>One adaptable platform</span></div><div><strong>5 days</strong><span>Target assembly time</span></div></div>
         </header>
@@ -1123,40 +1000,11 @@
                 <div class="donation-methods">
                     <div class="donation-method">
                         <h3>Donate through HCB</h3>
-                        <p>This is a separate option and opens the HCB donation page in a new tab.</p>
+                        <p>Support the project through our HCB donation page. Opens in a new tab.</p>
                         <a class="donate-cta" href="https://hcb.hackclub.com/donations/start/ferroworks" target="_blank" rel="noopener">Open HCB donation page</a>
                     </div>
 
-                    <div class="donation-method">
-                        <h3>Donate with PayPal or card</h3>
-                        <p>Choose an amount, then continue with PayPal or a debit/credit card through PayPal. This site does not collect or store card details.</p>
-                        <form class="donate-amount-form" id="donate-amount-form" autocomplete="off">
-                            <label class="donate-label" for="donate-amount">Donation amount (USD)</label>
-                            <div class="donate-presets" role="group" aria-label="Preset donation amounts">
-                                <button type="button" class="donate-preset" data-amount="10">$10</button>
-                                <button type="button" class="donate-preset" data-amount="25">$25</button>
-                                <button type="button" class="donate-preset" data-amount="50">$50</button>
-                                <button type="button" class="donate-preset" data-amount="100">$100</button>
-                            </div>
-                            <input type="number" id="donate-amount" class="donate-amount-input" placeholder="Custom amount (USD) — minimum $1" min="1" step="0.01" required>
-                            <button type="button" class="donate-checkout-btn" id="donate-checkout-btn">Continue to payment</button>
-                        </form>
 
-                        <div class="checkout-summary" id="donate-checkout" style="display:none;">
-                            <b>You are donating to FERROWORKER</b>
-                            <div class="cost"><sup>USD</sup><span id="checkout-amount">10.00</span></div>
-                        </div>
-                        <div class="paypal-payment-options">
-                            <div id="paypal-button-container"></div>
-                            <div id="paypal-card-button-container"></div>
-                        </div>
-                        <div class="donate-status" id="donate-status" role="status" aria-live="polite"></div>
-
-                        <div class="secure-pay-badge" aria-label="Secure payment processing">
-                            <span aria-hidden="true">&#128274;</span>
-                            <span>Secured by PayPal</span>
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -1291,14 +1139,11 @@
                 <span style="color:#d8d1c1;margin:0 8px;">|</span>
                 <a href="mailto:admin@ferroworks.org">Email ↗</a>
                 <span style="color:#d8d1c1;margin:0 8px;">|</span>
-                <a href="https://hackclub.slack.com/archives/C0C0V63AW4R" target="_blank" rel="noopener">Slack ↗</a>
-                <span style="color:#d8d1c1;margin:0 8px;">|</span>
                 <a href="/partner">Partners ↗</a>
             </div>
         </footer>
     </div>
 
-    <script src="https://www.paypal.com/sdk/js?client-id=BAA6qyPwf1mskKbC9xt3YUZJHn8H8ptxiPBsdUQuvoK7ET-KMbomdOZJCBLJmSYyNh9N9QDfdDhS3pQZlo&currency=USD&enable-funding=card,applepay"></script>
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(function (link) {
             link.addEventListener('click', function (event) {
@@ -1414,207 +1259,7 @@
                 console.error(error);
             });
 
-        (function () {
-            var presetButtons = document.querySelectorAll('.donate-preset');
-            var donateAmountInput = document.getElementById('donate-amount');
-            var currentAmount = '10.00';
 
-            function setAmount(value) {
-                currentAmount = value;
-                if (donateAmountInput) donateAmountInput.value = value;
-                presetButtons.forEach(function(btn) {
-                    var btnAmount = btn.getAttribute('data-amount');
-                    btn.setAttribute('aria-pressed', btnAmount === String(value) ? 'true' : 'false');
-                });
-            }
-
-            if (presetButtons.length) {
-                presetButtons.forEach(function(btn) {
-                    btn.addEventListener('click', function() {
-                        setAmount(btn.getAttribute('data-amount'));
-                    });
-                });
-            }
-
-            if (donateAmountInput) {
-                donateAmountInput.addEventListener('input', function() {
-                    var val = donateAmountInput.value.trim();
-                    if (val) {
-                        currentAmount = val;
-                        presetButtons.forEach(function(btn) {
-                            btn.setAttribute('aria-pressed', 'false');
-                        });
-                    }
-                });
-            }
-
-            if (presetButtons.length) setAmount('10');
-
-            var checkoutBtn = document.getElementById('donate-checkout-btn');
-            var checkoutSection = document.getElementById('donate-checkout');
-            var checkoutAmountEl = document.getElementById('checkout-amount');
-            var amountForm = document.getElementById('donate-amount-form');
-            var donateStatus = document.getElementById('donate-status');
-            var paypalContainer = document.getElementById('paypal-button-container');
-            var paypalCardContainer = document.getElementById('paypal-card-button-container');
-            var paypalRendered = false;
-
-            function showDonateStatus(message, type) {
-                if (!donateStatus) return;
-                donateStatus.textContent = '';
-                donateStatus.className = 'donate-status show' + (type ? ' ' + type : '');
-                donateStatus.appendChild(document.createTextNode(message));
-                if (type === 'success') {
-                    var again = document.createElement('button');
-                    again.type = 'button';
-                    again.className = 'donate-again';
-                    again.textContent = 'Make another donation';
-                    again.addEventListener('click', resetDonateFlow);
-                    donateStatus.appendChild(document.createElement('br'));
-                    donateStatus.appendChild(again);
-                }
-            }
-
-            function clearDonateStatus() {
-                if (!donateStatus) return;
-                donateStatus.textContent = '';
-                donateStatus.className = 'donate-status';
-            }
-
-            function resetDonateFlow() {
-                clearDonateStatus();
-                if (paypalContainer) {
-                    paypalContainer.style.display = 'block';
-                    paypalContainer.innerHTML = '';
-                }
-                if (paypalCardContainer) {
-                    paypalCardContainer.style.display = 'block';
-                    paypalCardContainer.innerHTML = '';
-                }
-                if (amountForm) amountForm.style.display = 'block';
-                if (checkoutSection) checkoutSection.style.display = 'none';
-                if (presetButtons.length) setAmount('10');
-                paypalRendered = false;
-            }
-
-            function showCheckout(amount) {
-                clearDonateStatus();
-                if (checkoutAmountEl) checkoutAmountEl.textContent = amount.toFixed(2);
-                if (amountForm) amountForm.style.display = 'none';
-                if (checkoutSection) checkoutSection.style.display = 'block';
-                requestAnimationFrame(function() {
-                    renderPayPalButton();
-                });
-            }
-
-            function renderPayPalButton() {
-                if (paypalRendered || !paypalContainer) return;
-                if (typeof paypal === 'undefined') {
-                    var fallback = document.createElement('p');
-                    fallback.className = 'donate-app-note';
-                    fallback.textContent = "PayPal checkout did not load. Check that the PayPal client ID is configured, then refresh or use the HCB option above.";
-                    paypalContainer.appendChild(fallback);
-                    return;
-                }
-
-                try {
-                    var sharedCallbacks = {
-                        createOrder: function(data, actions) {
-                            var amt = checkoutAmountEl ? parseFloat(checkoutAmountEl.textContent) : parseFloat(currentAmount);
-                            if (isNaN(amt) || amt <= 0) {
-                                showDonateStatus('Invalid donation amount.', 'error');
-                                throw new Error('Invalid donation amount');
-                            }
-                            return actions.order.create({
-                                purchase_units: [{
-                                    amount: {
-                                        value: amt.toFixed(2),
-                                        currency_code: 'USD'
-                                    }
-                                }]
-                            });
-                        },
-                        onApprove: function(data, actions) {
-                            return actions.order.capture().then(function(details) {
-                                var name = (details.payer && details.payer.name && details.payer.name.given_name) ? details.payer.name.given_name : 'supporter';
-                                showDonateStatus('Thank you, ' + name + '! Your donation went through.', 'success');
-                                if (paypalContainer) paypalContainer.style.display = 'none';
-                                if (paypalCardContainer) paypalCardContainer.style.display = 'none';
-                            }).catch(function() {
-                                showDonateStatus('Payment could not be completed. Please try again.', 'error');
-                            });
-                        },
-                        onCancel: function() {
-                            showDonateStatus('Donation cancelled. You can try again anytime.', 'info');
-                        },
-                        onError: function(err) {
-                            console.error('PayPal button error:', err);
-                            showDonateStatus('There was a problem processing your donation. Please try again later.', 'error');
-                        }
-                    };
-                    var paypalFunding = paypal.FUNDING || {};
-                    var paypalButtonOptions = Object.assign({}, sharedCallbacks, {
-                        style: {
-                            shape: 'rect',
-                            label: 'paypal',
-                            layout: 'vertical',
-                            tagline: false
-                        }
-                    });
-                    if (paypalFunding.PAYPAL) paypalButtonOptions.fundingSource = paypalFunding.PAYPAL;
-
-                    paypal.Buttons(paypalButtonOptions).render('#paypal-button-container').catch(function(err) {
-                        console.error('PayPal render error:', err);
-                        showDonateStatus('PayPal could not load this checkout. Please try again or use HCB.', 'error');
-                    });
-
-                    if (paypalCardContainer && paypalFunding.CARD) {
-                        var cardButton = paypal.Buttons(Object.assign({}, sharedCallbacks, {
-                            fundingSource: paypalFunding.CARD,
-                            style: {
-                                shape: 'rect',
-                                label: 'pay',
-                                layout: 'vertical',
-                                tagline: false
-                            }
-                        }));
-                        if (cardButton.isEligible()) {
-                            cardButton.render('#paypal-card-button-container').catch(function(err) {
-                                console.error('PayPal card button render error:', err);
-                                showDonateStatus('PayPal card checkout could not load. Please use the PayPal option or try again.', 'error');
-                            });
-                        } else {
-                            var cardUnavailable = document.createElement('p');
-                            cardUnavailable.className = 'paypal-card-note';
-                            cardUnavailable.textContent = 'Card checkout is not enabled for this PayPal account. Use the PayPal option to see available payment methods.';
-                            paypalCardContainer.appendChild(cardUnavailable);
-                        }
-                    } else if (paypalCardContainer) {
-                        var cardUnavailable = document.createElement('p');
-                        cardUnavailable.className = 'paypal-card-note';
-                        cardUnavailable.textContent = 'Card checkout is not available for this PayPal account. Use the PayPal option to see available payment methods.';
-                        paypalCardContainer.appendChild(cardUnavailable);
-                    }
-
-                    paypalRendered = true;
-                } catch (e) {
-                    console.error('PayPal render exception:', e);
-                    showDonateStatus('Payment button failed to load. Please try again or use HCB.', 'error');
-                }
-            }
-
-            if (checkoutBtn) {
-                checkoutBtn.addEventListener('click', function() {
-                    var raw = (donateAmountInput && donateAmountInput.value.trim()) ? donateAmountInput.value.trim() : currentAmount;
-                    var amt = parseFloat(raw);
-                    if (isNaN(amt) || amt <= 0) {
-                        if (donateAmountInput) donateAmountInput.reportValidity();
-                        return;
-                    }
-                    showCheckout(amt);
-                });
-            }
-        })();
 
         (function () {
             var recycleForm = document.getElementById('recycle-form');
