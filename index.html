@@ -877,6 +877,7 @@
         }
     </style>
     <link rel="stylesheet" href="/site.css">
+    <link rel="stylesheet" href="/industrial.css">
     <link rel="stylesheet" href="/research.css">
 </head>
 <body>
@@ -884,48 +885,58 @@
 
     <div class="wrapper">
         <nav aria-label="Main navigation">
-            <div class="nav-badge">FERROWORKER</div>
+            <a class="nav-badge" href="#main-content" aria-label="FERROWORKER home">FERROWORKER</a>
             <button class="nav-toggle" aria-expanded="false" aria-controls="navLinks" onclick="toggleNav()" aria-label="Toggle navigation menu">MENU</button>
             <div class="nav-links" id="navLinks">
-                <a href="#about" class="nav-link">About</a>
-                <a href="#research" class="nav-link">Survey & news</a>
-                <a href="#printer" class="nav-link">Printer</a>
-                <a href="#features" class="nav-link">Features</a>
-                <a href="#bom" class="nav-link">BOM</a>
-                <a href="#team" class="nav-link">Meet the team</a>
+                <a href="#printer" class="nav-link">Machine</a>
+                <a href="#features" class="nav-link">Tools</a>
+                <a href="#about" class="nav-link">Project</a>
                 <a href="#progress" class="nav-link">Build log</a>
-                <a href="#donate" class="nav-link">Donate</a>
-                <a href="/partner" class="nav-link">Partners</a>
-                <a href="#recycle" class="nav-link">Recycle</a>
+                <a href="#research" class="nav-link nav-link-research">Research &amp; updates</a>
+                <a href="/partner" class="nav-link nav-link-partner">Partners</a>
             </div>
         </nav>
 
         <header class="hero" id="main-content">
-            <div class="eyebrow"><span></span> IN DEVELOPMENT · BUILT TOGETHER</div>
-            <h1>Big ideas.<br>One machine.</h1>
-            <p>Meet FERROWORKER. A one-metre-cube printer concept with a tool changer for printing, laser cutting and CNC drilling. Ambitious by design. Built by a young team.</p>
-            <a href="#printer" class="btn-cta">Explore the machine <span aria-hidden="true">↗</span></a>
-            <a href="https://github.com/FERROWORKS-hackclub/FERROWORKER" class="btn-cta" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub (opens in new tab)" style="margin-left: 1rem; background-color: var(--cyan);">GitHub</a>
-        <div class="hero-specs"><div><strong>1 m³</strong><span>Planned build volume</span></div><div><strong>3 tools</strong><span>One adaptable platform</span></div><div><strong>5 days</strong><span>Target assembly time</span></div></div>
+            <div class="hero-copy">
+                <p class="hero-kicker"><span>F /</span> FERROWORKS · BRISBANE, AUSTRALIA</p>
+                <h1>One machine.<br>Room to make.</h1>
+                <p>FERROWORKER is a large-format printer concept with a planned tool changer for printing, laser cutting and CNC drilling. It is being developed in the open by a young team.</p>
+                <div class="hero-actions">
+                    <a href="#printer" class="btn-cta">Explore the machine <span aria-hidden="true">↗</span></a>
+                    <a href="https://github.com/FERROWORKS-hackclub/FERROWORKER" class="btn-cta secondary" target="_blank" rel="noopener noreferrer">View the project on GitHub</a>
+                </div>
+            </div>
+            <figure class="hero-machine" id="printer" aria-labelledby="machine-figure-caption">
+                <div class="machine-frame-bar"><span>FERROWORKER / CONCEPT MODEL</span><span class="machine-status"><i aria-hidden="true"></i> IN DEVELOPMENT</span></div>
+                <iframe class="printer-embed" src="ferroworker-simulator.html" title="Interactive 3D concept of the FERROWORKER printer" loading="eager"></iframe>
+                <figcaption class="hero-machine-caption" id="machine-figure-caption"><span>Interactive concept</span><span>Drag to rotate · scroll to zoom</span></figcaption>
+            </figure>
+            <div class="hero-specs" aria-label="Planned project targets">
+                <div><span>Build volume</span><strong>1 × 1 × 1 m</strong><small>Planned</small></div>
+                <div><span>Tool heads</span><strong>03</strong><small>Printer · laser · CNC</small></div>
+                <div><span>Assembly target</span><strong>5 days</strong><small>Target, not a guarantee</small></div>
+            </div>
         </header>
-
         <main>
-            <section id="printer" aria-labelledby="printer-title">
-                <div class="sec-num">01</div>
+            <section id="machine-details" aria-labelledby="printer-title">
+                <div class="sec-num">The concept</div>
                 <h2 class="section-title" id="printer-title">The printer</h2>
                 <p>Explore the printer concept. The planned build volume is 1 × 1 × 1 metre, with a tool changer planned for printing, laser cutting, and CNC drilling.</p>
-                <iframe class="printer-embed" src="ferroworker-simulator.html" title="Interactive 3D concept of the FERROWORKER printer" loading="lazy"></iframe>
-                <p class="printer-note">Concept visualization, not finished CAD. The frame, electronics, and parts list are still being developed.</p>
+                <div class="machine-details-grid">
+                    <p class="printer-note">This is a concept visualization, not finished CAD. The frame, electronics and parts list are still in development.</p>
+                    <dl class="machine-readout"><div><dt>Work area</dt><dd>1 × 1 × 1 metre</dd></div><div><dt>Current stage</dt><dd>Frame and electronics planning</dd></div><div><dt>Model</dt><dd><a href="#printer">Open interactive view ↑</a></dd></div></dl>
+                </div>
             </section>
 
             <section id="about" aria-labelledby="about-title">
-                <div class="sec-num">02</div>
+                <div class="sec-num">Project notes</div>
                 <h2 class="section-title" id="about-title">What we're building</h2>
                 <p>We're figuring out the frame, checking part prices, and writing down the build steps as we go. FERROWORKER is open source, but some design code and other project materials are excluded from the public release. Licensing details for the completed product will be published when development is complete.</p>
             </section>
 
             <section id="features" aria-labelledby="features-title">
-                <div class="sec-num">03</div>
+                <div class="sec-num">Tooling</div>
                 <h2 class="section-title" id="features-title">Tool Changer</h2>
                 <p>The idea is one machine with three tools:</p>
                 <ul class="plain">
@@ -936,7 +947,7 @@
             </section>
 
             <section id="bom" aria-labelledby="bom-title">
-                <div class="sec-num">04</div>
+                <div class="sec-num">Parts target</div>
                 <h2 class="section-title" id="bom-title">Cost & BOM</h2>
                 <div class="cost"><sup>USD</sup>&lt; 900</div>
                 <p>We're trying to keep the parts under $900 USD. That's a target, not a final total.</p>
@@ -946,7 +957,7 @@
             </section>
 
             <section id="progress" aria-labelledby="progress-title">
-                <div class="sec-num">05</div>
+                <div class="sec-num">In progress</div>
                 <h2 class="section-title" id="progress-title">Build log</h2>
 
                 <div class="progress-bar-wrap">
@@ -996,7 +1007,7 @@
             </section>
 
             <section id="donate" aria-labelledby="donate-title">
-                <div class="sec-num">06</div>
+                <div class="sec-num">Funding</div>
                 <h2 class="section-title" id="donate-title">Help pay for parts</h2>
                 <p>This machine needs a lot of parts. Donations help us buy them; the plans and guide will stay free.</p>
                 <div class="donation-methods">
@@ -1011,7 +1022,7 @@
             </section>
 
             <section id="recycle" aria-labelledby="recycle-title">
-                <div class="sec-num">07</div>
+                <div class="sec-num">Parts wanted</div>
                 <h2 class="section-title" id="recycle-title">Got an old printer?</h2>
                 <p>If you're done with a printer, we'd like to reuse its working parts in a FERROWORKER build. Broken or incomplete machines are welcome too.</p>
                 <ul class="plain">
@@ -1054,7 +1065,7 @@
             </section>
 
             <section id="team" aria-labelledby="team-title">
-                <div class="sec-num">08</div>
+                <div class="sec-num">The people</div>
                 <h2 class="section-title" id="team-title">Meet the team</h2>
                 <div class="grid-3">
                     <article class="card">
@@ -1191,6 +1202,13 @@
         <footer>
             <div>FERROWORKER · Open source, with some design code and other materials excluded · product licensing details to follow when complete · made by Riley Wood</div>
             <div>
+                <a href="#printer">Machine</a>
+                <a href="#features">Tools</a>
+                <a href="#bom">Cost &amp; BOM</a>
+                <a href="#team">Team</a>
+                <a href="#donate">Donate</a>
+                <a href="#recycle">Recycle parts</a>
+                <a href="#research">Survey &amp; updates</a>
                 <a href="https://github.com/FERROWORKS-hackclub/FERROWORKER" target="_blank" rel="noopener">GitHub ↗</a>
                 <span style="color:#d8d1c1;margin:0 8px;">|</span>
                 <a href="mailto:admin@ferroworks.org">Email ↗</a>
