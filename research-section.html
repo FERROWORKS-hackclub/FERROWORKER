@@ -1,0 +1,53 @@
+            <section id="research" aria-labelledby="research-title">
+                <div class="fw-research-layout">
+                    <div class="fw-research-intro">
+                        <p class="fw-research-eyebrow">BUILT WITH YOUR INPUT</p>
+                        <h2 id="research-title">What would<br>you make?</h2>
+                        <p>Help shape FERROWORKER. Tell us what matters, what you’d build, and what a fair price looks like.</p>
+                        <div class="fw-research-facts"><span>3 minutes</span><span>12 quick questions</span><span>No account needed</span></div>
+                        <div class="fw-newsletter-card">
+                            <span class="fw-research-eyebrow">JUST HERE FOR THE UPDATES?</span>
+                            <h3>From our workshop.<br>To your inbox.</h3>
+                            <p>Build progress, product news and launch updates. Sent from newsletter@ferroworks.org.</p>
+                            <form id="fw-newsletter-form">
+                                <label for="fw-newsletter-name">Name</label><input id="fw-newsletter-name" name="name" autocomplete="name" maxlength="160" required placeholder="Your name">
+                                <label for="fw-newsletter-email">Email</label><input id="fw-newsletter-email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.com">
+                                <div class="fw-trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+                                <label class="fw-research-check"><input type="checkbox" name="newsletterConsent" required><span>Yes, email me Ferroworks news and marketing updates. I can unsubscribe at any time.</span></label>
+                                <p class="fw-newsletter-privacy">Signup records your name, email, browser identifier, IP address and approximate location. Your address is confirmed by email before newsletter delivery.</p>
+                                <button type="submit">Join the mailing list <span aria-hidden="true">↗</span></button>
+                                <p id="fw-newsletter-message" role="status" tabindex="-1"></p>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="fw-survey-card">
+                        <div class="fw-survey-top"><span>FERROWORKER / PRODUCT SURVEY</span><b id="fw-survey-step-label">01 / 03</b></div>
+                        <div class="fw-survey-progress" aria-hidden="true"><span id="fw-survey-progress-fill"></span></div>
+                        <form id="fw-survey-form">
+                            <fieldset data-survey-step="0"><legend>First, a little about you.</legend><p class="fw-step-copy">A name to put to the ideas.</p>
+                                <div class="fw-survey-two"><label for="fw-survey-name">What is your name?<input id="fw-survey-name" name="name" autocomplete="name" required maxlength="160"></label><label for="fw-survey-email">What is your email?<input id="fw-survey-email" name="email" type="email" autocomplete="email" required maxlength="254"></label></div>
+                                <label for="fw-survey-continent">Which continent are you from?<select id="fw-survey-continent" name="continent" required><option value="">Choose a continent</option><option>Africa</option><option>Antarctica</option><option>Asia</option><option>Europe</option><option>North America</option><option>Oceania</option><option>South America</option><option>Prefer not to say</option></select></label>
+                                <label for="fw-survey-make">What would you make with FERROWORKER?<textarea id="fw-survey-make" name="make" required minlength="2" maxlength="2000" rows="4" placeholder="Projects, products, experiments…"></textarea></label>
+                            </fieldset>
+                            <fieldset data-survey-step="1" hidden><legend>Your machine. Your priorities.</legend><p class="fw-step-copy">These are research questions, not final specifications or delivery promises.</p>
+                                <fieldset class="fw-question"><legend>What would be a fair price? <span>AUD</span></legend><div class="fw-price-options" id="fw-price-options"></div></fieldset>
+                                <label for="fw-survey-shipping">What would be the best shipping time?<div class="fw-shipping-output"><output id="fw-shipping-output" for="fw-survey-shipping">14 days</output></div><input id="fw-survey-shipping" name="shippingDays" type="range" min="4" max="35" step="1" value="14"><div class="fw-range-labels"><span>4 days</span><span>35 days</span></div></label>
+                                <fieldset class="fw-question"><legend>Which setup would you prefer?</legend><div class="fw-choice-grid" id="fw-drive-options"></div></fieldset>
+                                <fieldset class="fw-question"><legend>Which tool should be the priority?</legend><div class="fw-choice-grid" id="fw-priority-options"></div></fieldset>
+                                <fieldset class="fw-question"><legend>What matters most? <span>Choose exactly two</span></legend><div class="fw-choice-grid" id="fw-tradeoff-options"></div><p class="fw-selection-count" id="fw-tradeoff-count" aria-live="polite">0 of 2 selected</p></fieldset>
+                            </fieldset>
+                            <fieldset data-survey-step="2" hidden><legend>Let’s get specific.</legend><p class="fw-step-copy">Tell us what your projects need.</p>
+                                <fieldset class="fw-question"><legend>What filament would you use? <span>Choose all that apply</span></legend><div class="fw-choice-grid" id="fw-filament-options"></div><label id="fw-filament-other-label" hidden>Other filament<input name="filamentOther" maxlength="200" placeholder="Tell us which filament"></label></fieldset>
+                                <fieldset class="fw-question"><legend>What wood types would you use? <span>Choose all that apply</span></legend><div class="fw-choice-grid" id="fw-wood-options"></div><label id="fw-wood-other-label" hidden>Other wood<input name="woodOther" maxlength="200" placeholder="Tell us which wood"></label></fieldset>
+                                <fieldset class="fw-question"><legend>At your chosen price, would you buy this machine?</legend><div class="fw-choice-grid" id="fw-buy-options"></div></fieldset>
+                                <div class="fw-survey-consent"><label class="fw-research-check"><input name="newsletterConsent" type="checkbox"><span>Also email me Ferroworks news and marketing updates. Optional; unsubscribe at any time.</span></label><label class="fw-research-check"><input name="privacyConsent" type="checkbox" required><span>I agree to Ferroworks storing my answers, name and email, browser identifier, browser details, IP address and approximate location for product research.</span></label><p>Answers and submission details are visible to Ferroworks staff inside Goldeneye. We don’t collect precise GPS location or create a device fingerprint. IP-based locations can be inaccurate.</p></div>
+                            </fieldset>
+                            <div class="fw-trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+                            <p id="fw-survey-message" role="status" tabindex="-1"></p>
+                            <div class="fw-survey-actions"><button id="fw-survey-back" type="button" hidden>← Back</button><span id="fw-survey-next-copy">Up next: your machine</span><button id="fw-survey-next" type="button">Continue <span aria-hidden="true">→</span></button><button id="fw-survey-submit" type="submit" hidden>Share my answers <span aria-hidden="true">↗</span></button></div>
+                        </form>
+                        <div class="fw-survey-complete" id="fw-survey-complete" hidden tabindex="-1"><span class="fw-complete-mark">✓</span><h3>You’re part of the build.</h3><p id="fw-survey-complete-message">Your answers are saved. Thank you for helping shape FERROWORKER.</p><a href="#progress">See the build log ↗</a></div>
+                        <noscript><p>Please enable JavaScript to submit the survey or join the mailing list.</p></noscript>
+                    </div>
+                </div>
+            </section>
